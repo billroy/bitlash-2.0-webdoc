@@ -1,0 +1,169 @@
+===== Bitlash User Functions =====
+
+While Bitlash functions are a handy and straightforward way to extend Bitlash, there are cases where you need native C code to get closer to the hardware, perhaps for speed or to interface with a custom peripheral.
+
+Starting with version 1.1, Bitlash provides an easy way to call C functions from Bitlash code, just like the Bitlash built-in functions.  In effect, you add your functions to the Bitlash function library, and they become callable from the Bitlash command line.
+
+The work happens in a function named **addBitlashFunction()** that is exposed as part of the Bitlash API.  You call **addBitlashFunction()** in your sketch to register your C function with Bitlash and associate it with a function name.  Then Bitlash calls your C function when it is invoked from the command line (or a function...).
+
+Bitlash 2 introduces a new variable-argument scheme, using the getarg() function to fetch passed arguments from the interpreter core.  Users of earlier versions will want to carefully review the section on fetching passed arguments below.
+
+If you follow a few rules for setting up your function, you can wrap it in Bitlash without having to write a line of parsing code.  You get all the parsing, functions, printing, and the rest of the runtime library for free.
+
+Which is why it is worth reading the next section to learn how to set up your C function so Bitlash can call it properly.
+
+----
+==== Declaring the C function ====
+
+Bitlash exposes the C variable type named **numvar** representing (in the Arduino version) the "signed long" integer data types.  All internal calculations are done using fixed-point arithmetic in this precision.
+
+So the first rule is that your function must return a value of type **numvar**.
+
+Here is a simple example to walk through the plumbing.  This example code is in the examples folder supplied with Bitlash, so you can open it in the Arduino IDE by selecting File -> Examples -> bitlash -> userfunctions if you'd like to follow along.
+
+Suppose for some reason we need to be able to grab the count value from the AVR's internal Timer1 timer and use it in Bitlash.
+
+In the Arduino sketch, we declare a user function named "timer1", taking no arguments, returning a numeric Bitlash value containing the timer count register value we're after:
+<code>
+numvar timer1(void) { 
+	return TCNT1; 	// return the value of Timer 1
+}
+...void setup(void)...
+</code>
+
+This completes the definition of the user function.  What remains is to call **addBitlashFunction()** to register this new handler.
+
+----
+
+===== Registering a Function With addBitlashFunction() =====
+
+You call **addBitlashFunction()** from your C startup code to register your function with Bitlash.
+
+**addBitlashFunction()** takes two arguments:
+  * a name for the new function
+  * the function handler to call with "(bitlash_function)" cast before it
+
+While you can call **addBitlashFunction()** any time, one would normally call it from setup(), like this, to complete the code for the example:
+
+<code>
+void setup(void) {
+	initBitlash(57600);		// must be first to initialize serial port
+
+	// Register the extension function with Bitlash
+	//		"timer1" is the Bitlash name for the function
+	//		(bitlash_function) timer1 tells Bitlash where our handler lives
+	//
+	addBitlashFunction("timer1", (bitlash_function) timer1);
+}
+
+void loop(void) {
+	runBitlash();
+}
+</code>
+
+The setup() function initializes Bitlash and then calls **addBitlashFunction()** to install timer1().  The loop() function runs Bitlash as usual.
+
+Now when Bitlash starts up it knows a new word:
+<code>
+bitlash here! ...
+> print timer1(), timer1(), timer1()
+22 194 67
+</code>
+
+----
+==== The Function Name ====
+
+A function name is a string constant of up to IDLEN (11) characters, like "timer1".  It must start with a letter, and may contain letters, numbers, and the underscore '_' and period '.' characters.
+
+Overriding the built-in function names is not supported; the user functions are searched last so if you use a built-in name your function will never be called.
+
+----
+==== Fetching Passed Arguments with getarg() ====
+
+Your bitlash_function is declared (void).  How does it get argument values from Bitlash?
+
+Starting with Bitlash 2.0, a function does not need to accept any particular number of arguments.  The arguments being passed to your macro are available to your code as via the Bitlash function API point getarg().
+
+The value returned by getarg(0) is the count of arguments passed to your function.  You can fetch the value of those arguments using getarg(1), getarg(2),... and so on to getarg(getarg(0)).
+
+See the file examples/tonedemo.pde for an example of how to use getarg(0) to control how your function processes a variable number of input arguments.
+
+
+----
+
+==== The Function Handler Argument ====
+
+The function argument to **addBitlashFunction()** provides Bitlash with the name of the C function handler you wrote to handle your user function.  A small syntactic complexity: It is required to cast your function to the type "(bitlash_function)" to pass it to Bitlash, which is why the mantatory text "(bitlash_function)" appears before the function name in the example:
+
+<code>
+...
+	addBitlashFunction("timer1", (bitlash_function) timer1);
+...
+</code>
+
+If you omit the cast the compiler will complain about function type mismatches.
+
+
+----
+==== NOTE: Maximum Number of User Functions ====
+
+Bitlash ships with MAX_USER_FUNCTIONS set to 6 and will throw an exception if you try to install more.
+
+If you need more functions, adjust the definition of MAX_USER_FUNCTIONS in bitlash-functions.c.
+
+----
+===== Coding User Functions =====
+
+Here are some notes on limitations and issues you may need to address when coding a user function.
+
+----
+==== Sharing the CPU ====
+
+Calling delay() from a user function is generally to be avoided, since delay() blocks everything else from happening.
+
+Bitlash background functions don't (well, can't) run while your function is running, since they get time on a poll from loop().  This may affect your design.
+
+----
+==== Calling Internal Bitlash Functions ====
+
+Generally it's fair game to call any internal Bitlash functions you want from your user function; you're inside the interpreter, after all.  But there are  things you should be cautious about in addition to the CPU time issue discussed above.
+
+The interpreter is not re-entrant, and is halfway through parsing and executing a command line when it encounters your function reference.  Don't re-enter Bitlash by calling **doCommand** or **runBitlash** from your user function.
+
+Avoid recursion and stack-local storage where possible in user functions.  Bear in mind that your function is executing inside the parser and is competing with the parser for stack space.  Deeply nested recursion from a user function can cause a stack overflow, and local variables in your function only make this happen faster.  
+
+You can call the get_free_memory() function (which handles the Bitlash free() function) to see how much stack space is available when your function runs.
+
+Unfortunately, it is very difficult to provide hard and fast rules about how much stack will be required for your application; experimentation is the best way to be sure.  Personally, I get uncomfortable when free() goes below 200 but I have seen applications that require much more.
+
+----
+==== Printing From User Functions: Console Redirection ====
+
+Printing from a user function using the Arduino Serial.print() function works as usual: it goes to the console as you would expect.
+
+You can also print through Bitlash using the Bitlash printing primitives: sp(), spb(), and speol(), about which you will find more in bitlash-serial.c.  If you use the Bitlash printing primitives, you will gain the benefit that any serial output redirection that is in effect when your function is called will be applied to your printed output.  In other words, your function can automatically print to whatever pin Bitlash has selected as the output pin.  
+
+Here's an example to clarify.  Suppose we have these two user functions wired up as **sayhi1** and **sayhi2**:
+
+<code>
+void sayhi1(void) { Serial.print("Hello"); }
+void sayhi2(void) { sp("Hi"); }
+</code>
+
+Consider this bitlash code:
+<code>
+print #3: sayhi1()
+print #3: sayhi2()
+print #4: sayhi2()
+</code>
+
+The first line will print "Hello" to the serial console.  Serial.print() output always goes there.
+
+The second Bitlash command will print "Hi" to the device on pin 3, since "redirection to pin 3" is in effect when the function is called.
+
+Likewise, the third command will print "Hi" on pin 4; thus a single user function can drive multiple output streams without needing special code.
+
+----
+===== Examples =====
+
+See the examples folder in the Bitlash distribution for more.  You can load examples in the Arduino IDE using the File -> Examples -> bitlash menu.

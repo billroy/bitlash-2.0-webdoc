@@ -1,0 +1,8 @@
+<span class="kw4">void</span> setup<span class="br0">&#40;</span><span class="kw4">void</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	initBitlash<span class="br0">&#40;</span><span class="nu0">57600</span><span class="br0">&#41;</span><span class="sy4">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw4">void</span> loop<span class="br0">&#40;</span><span class="kw4">void</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	runBitlash<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+	<span class="co1">// YourOtherCodeHere();</span>
+<span class="br0">&#125;</span>

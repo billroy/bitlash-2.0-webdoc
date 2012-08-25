@@ -1,0 +1,245 @@
+
+<h2 class="sectionedit1"><a name="bitlash_functions" id="bitlash_functions">Bitlash Functions</a></h2>
+<div class="level2">
+
+<p>
+Bitlash allows you to store and manage <strong>Bitlash Functions</strong> in the Arduino&#039;s EEPROM.  By defining new functions, you extend Bitlash to suit your application.
+</p>
+
+<p>
+Think of a function as a stored command line.  In Bitlash, that can be multiple statements.  And a statement within a function can call a function, so function execution can nest like subroutine calls (up to a dozen levels deep or so).
+But the simplest use is simply to give a name to a sequence of commands.
+</p>
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "Bitlash Functions" [1-508] -->
+<h3 class="sectionedit2"><a name="rules_for_function_names" id="rules_for_function_names">Rules For Function Names</a></h3>
+<div class="level3">
+
+<p>
+Function names must begin with an alpha character [&#039;a&#039;..&#039;z&#039;] and be 12 characters or less in length. (Yes, “filename.txt” is a legal function name.)  Function names must be more than one character long (to avoid conflict with the built-in numeric variables named a through z) and must not conflict with any of the pin variables (d0..22 and a0..7), nor with the built-in functions and commands.  Function names can contain digits and the underscore &#039;_&#039; and period &#039;.&#039; characters.
+</p>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "Rules For Function Names" [509-1029] -->
+<h3 class="sectionedit3"><a name="defining_a_function" id="defining_a_function">Defining a Function</a></h3>
+<div class="level3">
+
+<p>
+To define a function, use the <strong>function name {stmt;stmt;}</strong> syntax:
+</p>
+<pre class="code">&gt; function toggle13 {d13=!d13;delay(100);}	// defines toggle13: flip the bit and wait a while
+&gt; function hello {print(&quot;Hello, world!);}</pre>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "Defining a Function" [1030-1286] -->
+<h3 class="sectionedit4"><a name="run_a_functionforeground" id="run_a_functionforeground">Run a function: foreground</a></h3>
+<div class="level3">
+
+<p>
+To invoke a function, you can type its name at the command line or refer to it in another function (for example in the definition of startup above):
+</p>
+<pre class="code">&gt; toggle13			// flips bit 13</pre>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Run a function: foreground" [1287-1523] -->
+<h3 class="sectionedit5"><a name="run_a_functionbackground" id="run_a_functionbackground">Run a function: background</a></h3>
+<div class="level3">
+
+<p>
+To run a function in the background use the <strong>run</strong> command:
+</p>
+<pre class="code">&gt; run toggle13
+&gt; ps			// is anything running?
+0: toggle13		// yes, there&#039;s our function running
+&gt; stop 0		// stop it
+&gt;				// now it&#039;s stopped</pre>
+
+<p>
+There is more detail on this topic in the <a href="/wiki/backgroundfunctions" class="wikilink1" title="backgroundfunctions">Background Functions</a> section.
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "Run a function: background" [1524-1881] -->
+<h3 class="sectionedit6"><a name="list_functions_in_eeprom" id="list_functions_in_eeprom">List functions in EEPROM</a></h3>
+<div class="level3">
+
+<p>
+To list all the functions stored in the EEPROM use the <strong>ls</strong> command:
+</p>
+<pre class="code">&gt; ls					// list all the functions
+function toggle13 {d13=!d13;}
+function hello {print(&quot;Hello, world!&quot;;}</pre>
+
+<p>
+Note that <strong>ls</strong> inserts &#039;\&#039; before escape characters.
+</p>
+<hr />
+
+</div>
+<!-- EDIT6 SECTION "List functions in EEPROM" [1882-2170] -->
+<h3 class="sectionedit7"><a name="remove_a_function_from_eeprom" id="remove_a_function_from_eeprom">Remove a function from EEPROM</a></h3>
+<div class="level3">
+
+<p>
+To remove a function use the <strong>rm</strong> command:
+</p>
+<pre class="code">&gt; rm hello				// rm removes a function.  rm * does what you think.
+&gt; ls
+function toggle13 {d13=!d13;}</pre>
+<hr />
+
+</div>
+<!-- EDIT7 SECTION "Remove a function from EEPROM" [2171-2379] -->
+<h3 class="sectionedit8"><a name="the_startup_function" id="the_startup_function">The Startup Function</a></h3>
+<div class="level3">
+
+<p>
+If there is a function by the name “startup”, it is run automatically at boot time.  Make one like this:
+</p>
+<pre class="code">&gt; function startup {print 1,2,3;}
+&gt; boot
+bitlash v2.0 here!...
+1 2 3
+&gt;</pre>
+
+<p>
+Don&#039;t like it?
+</p>
+<pre class="code">&gt; function startup {...new definition...}		// redefine the startup function
+&gt; rm startup					// delete the startup function</pre>
+
+<p>
+Tip: If it looks like it&#039;s sitting there doing nothing, it&#039;s probably running a function.  Press ^C to break out of a looping startup command.
+</p>
+<hr />
+
+</div>
+<!-- EDIT8 SECTION "The Startup Function" [2380-2906] -->
+<h3 class="sectionedit9"><a name="the_prompt_function" id="the_prompt_function">The Prompt Function</a></h3>
+<div class="level3">
+
+<p>
+If there is a function by the name “prompt”, it is run automatically whenever the command line prompt is to be printed so that you can customize the prompt.
+Here is an example of a prompt function that prints the current time in millis:
+</p>
+<pre class="code">&gt; function prompt {print millis,;print &quot;$&quot;,;}
+36244$ 		// press enter at this prompt
+36484$ 		// time advances</pre>
+<hr />
+
+</div>
+<!-- EDIT9 SECTION "The Prompt Function" [2907-3306] -->
+<h3 class="sectionedit10"><a name="inspecting_and_formatting_function_storage_in_the_eeprom" id="inspecting_and_formatting_function_storage_in_the_eeprom">Inspecting and Formatting Function Storage in the EEPROM</a></h3>
+<div class="level3">
+
+<p>
+There may be debris in your EEPROM from another project.  Or your Bitlash program can blow chunks, or Bitlash can blow chunks.  Anyway, the EEPROM can become “less than fresh”.  This might first show up as funky results from the ls command, for example.
+</p>
+
+<p>
+You can inspect your EEPROM with the peep command, which prints a map of EEPROM:
+</p>
+<pre class="code">&gt; peep
+E000:  t13\ d13=  !d13 ;del  ay(1 00)\  star tup\  prin t(&quot;R  unni ng b  link -13   demo  - p
+E040:  ress  ^C&quot;  ); w hile   1:t 13\.  .... ....  .... ....  .... ....  .... ....  .... ....
+E080:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E0C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E100:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E140:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E180:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E1C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....</pre>
+
+<p>
+This is a healthy map.  The places marked &#039;.&#039; are empty (==255).  The name-value storage for t13 and startup can be seen.  As you add functions you will see them fill from low addresses up, always in pairs.
+</p>
+
+<p>
+An unhealthy map might have garbage in the supposedly unused part.  Or there could be free space available but spread around in fragmented blocks (see Fragmentation below).
+</p>
+
+<p>
+You can erase and “reformat” the EEPROM using the “rm *” command; see below.  
+This will erase any functions you have typed into bitlash, as well as the garbage.  
+In other words:
+</p>
+
+<p>
+<strong>Note: RM *” WILL NUKE THE WHOLE EEPROM.  There is no way to recover it.  Please use caution. </strong>
+</p>
+<hr />
+
+</div>
+<!-- EDIT10 SECTION "Inspecting and Formatting Function Storage in the EEPROM" [3307-5152] -->
+<h3 class="sectionedit11"><a name="a_note_on_eeprom_usagedon_t_bang_on_the_eeprom" id="a_note_on_eeprom_usagedon_t_bang_on_the_eeprom">A note on EEPROM usage: Don&#039;t bang on the EEPROM</a></h3>
+<div class="level3">
+
+<p>
+The EEPROM is said to be certified for about 1e5 cycles.  Bitlash could drive that many write cycles in under ten minutes, if you told it to.  If you do this and your EEPROM breaks you get to keep the pieces.  But please write and let us know how it failed.  We&#039;ve never seen it happen.
+Anyway, use EEPROM for long term storage like function definitions, not loop counters, and factor EEPROM life into your application life cycle model.
+</p>
+<hr />
+
+</div>
+<!-- EDIT11 SECTION "A note on EEPROM usage: Don't bang on the EEPROM" [5153-5655] -->
+<h3 class="sectionedit12"><a name="eeprom_free_space_fragmentation" id="eeprom_free_space_fragmentation">EEPROM Free Space Fragmentation</a></h3>
+<div class="level3">
+
+<p>
+Heavy use of the function store may lead to fragmented free space.  You would see this in the peep map as free space dot clusters too small to be of use scattered here and there.
+</p>
+
+<p>
+This version of Bitlash does not have a method to compact the free space, but if you are highly motivated to squeeze out the last possible byte, here is a straightforward but unfortunately manual workaround:
+</p>
+<ul>
+<li class="level1"><div class="li"> Use &#039;ls&#039; to get the contents of all the functions.  Copy to safe place!</div>
+</li>
+<li class="level1"><div class="li"> Use &#039;rm *&#039; to nuke the eeprom.  All your functions are gone!  Hope you copied them!</div>
+</li>
+<li class="level1"><div class="li"> Paste the output you saved into your bitlash terminal emulator to re-define the functions.</div>
+</li>
+</ul>
+
+<p>
+Depending on many factors, (baud rate, clock speed, terminal program, <acronym title="Operating System">OS</acronym>, …) it may be necessary to paste the definitions one at a time.
+</p>
+<hr />
+
+</div>
+<!-- EDIT12 SECTION "EEPROM Free Space Fragmentation" [5656-6492] -->
+<h3 class="sectionedit13"><a name="reserving_eeprom_for_other_applications" id="reserving_eeprom_for_other_applications">Reserving EEPROM for Other Applications</a></h3>
+<div class="level3">
+
+<p>
+A portion of the EEPROM space can be kept from bitlash for use by your application&#039;s C code by adjusting the values of STARTDB and ENDDB in bitlash.h.  You are advised to save, reformat, and reload any EEPROM contents after changing these values.
+</p>
+
+<p>
+Say you want to reserve 32 bytes at the high end of EEPROM (you&#039;ll be using EEPROM.read() and EEPROM.write to manipulate it), edit the #define of ENDDB to be
+</p>
+<pre class="code">  #define ENDDB (E2END - 32)</pre>
+
+<p>
+Bitlash will then use memory from STARTDB to ENDDB - 1.  Your 32 bytes run from ENDDB to ENDEEPROM - 1.  To read byte 15 of your private EEPROM, use EEPROM.read(ENDDB + 15).
+</p>
+
+<p>
+You can use the bitlash “peep” command to dump the EEPROM, which will include your space.  Telling bitlash to “rm *” will delete all of your bitlash functions from EEPROM, but will leave your private space unmolested.
+</p>
+
+<p>
+It&#039;s up to you to manage your private memory, including providing a way to clear it, etc.  One reasonable approach is to add a new bitlash C command or two to interact with and manipulate your private EEPROM space.
+</p>
+
+<p>
+Note that flashing your firmware from Arduino will NOT erase your reserved EEPROM.  (This is a feature, not a bug.)
+</p>
+
+</div>
+<!-- EDIT13 SECTION "Reserving EEPROM for Other Applications" [6493-] -->

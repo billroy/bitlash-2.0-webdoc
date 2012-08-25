@@ -1,0 +1,204 @@
+
+<h2 class="sectionedit1"><a name="bitlash_command_reference" id="bitlash_command_reference">Bitlash Command Reference</a></h2>
+<div class="level2">
+
+<p>
+Here is an alphabetical reference list of Bitlash commands.
+</p>
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "Bitlash Command Reference" [1-105] -->
+<h3 class="sectionedit2"><a name="expression_evaluation" id="expression_evaluation">expression evaluation</a></h3>
+<div class="level3">
+
+<p>
+If you type a “naked expression” it will be evaluated, and any side effects like function calls and function executions will happen, but nothing is printed unless you say so using <a href="/wiki/printing" class="wikilink1" title="printing">print</a>.  For example:
+</p>
+<pre class="code">&gt; d13=1; delay(125); d13=0
+&gt;</pre>
+
+<p>
+Your code is executed (d13 goes high for 125 ms), but all you see on the console is the command prompt after it&#039;s done.
+</p>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "expression evaluation" [106-523] -->
+<h3 class="sectionedit3"><a name="bootrestart_the_arduino" id="bootrestart_the_arduino">boot: restart the arduino</a></h3>
+<div class="level3">
+
+<p>
+Resets the Arduino.  On restart, the <strong>startup</strong> function will run, if one is present.
+</p>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "boot: restart the arduino" [524-653] -->
+<h3 class="sectionedit4"><a name="function_funcname_stmtstmt" id="function_funcname_stmtstmt">function funcname { stmt; ...; stmt;}</a></h3>
+<div class="level3">
+
+<p>
+Defines a new Bitlash Function to be stored in EEPROM.
+</p>
+
+<p>
+Note: Earlier versions of Bitlash defined macros using a different syntax.
+</p>
+
+<p>
+Bitlash <a href="/wiki/functions" class="wikilink1" title="functions">functions</a> have their own section.
+</p>
+<pre class="code">&gt; function blip {d13=!d13;}
+&gt; ls
+function blip {d13=!d13;}
+&gt; rm blip
+&gt; ls
+&gt;</pre>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "function funcname { stmt; ...; stmt;}" [654-988] -->
+<h3 class="sectionedit5"><a name="helpdisplay_some_onboard_help_text" id="helpdisplay_some_onboard_help_text">help: display some onboard help text</a></h3>
+<div class="level3">
+
+<p>
+Help displays a short help message that can be helpful if you forget the name of a command or function.  It also displays a list of your functions via &#039;ls&#039;.
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "help: display some onboard help text" [989-1199] -->
+<h3 class="sectionedit6"><a name="if_expr_stmtstmtelse_stmtstmtstmt" id="if_expr_stmtstmtelse_stmtstmtstmt">if (expr) {stmt;...; stmt;} [else {stmt;stmt;...; stmt;}</a></h3>
+<div class="level3">
+
+<p>
+The <strong>while</strong> and <strong>if</strong> commands have their <a href="/wiki/conditionals" class="wikilink1" title="conditionals">own section</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT6 SECTION "if (expr) {stmt;...; stmt;} [else {stmt;stmt;...; stmt;}" [1200-1348] -->
+<h3 class="sectionedit7"><a name="ls" id="ls">ls</a></h3>
+<div class="level3">
+
+<p>
+List all the functions stored in EEPROM.
+</p>
+<pre class="code">&gt; function blip {d13=!d13;}
+&gt; ls
+function blip {d13=!d13};</pre>
+<hr />
+
+</div>
+<!-- EDIT7 SECTION "ls" [1349-1484] -->
+<h3 class="sectionedit8"><a name="peepprint_a_map_of_eeprom" id="peepprint_a_map_of_eeprom">peep: print a map of eeprom</a></h3>
+<div class="level3">
+
+<p>
+Peep prints a map of eeprom usage.  This can help you see how full your EEPROM is, and whether you have fragmented free space.
+</p>
+<pre class="code">&gt; peep
+E000:  foo\ prin  t #4 :&quot;.^  &quot;,\b lip\  d13= !d13  \cc\ ^^^\  t13\ d13=  !d13 ;sno  oze  100\
+E040:  b0\b lip;  snoo ze(i  *i); if +  +i&gt;m :i=-  m\st artu  p\ru n t1  3\al fa\a  bcde fghi
+E080:  jklm nopq  rstu vwxy  z\cl s\pr  int  #4:&quot;  xfe^ &quot;,\.  .... ....  .... ....  .... ....
+E0C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E100:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E140:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E180:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E1C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....</pre>
+
+<p>
+Note that the “E000” address is actually EEPROM address 0000.  Subtract 0xe000 from the addresses shown.
+</p>
+<hr />
+
+</div>
+<!-- EDIT8 SECTION "peep: print a map of eeprom" [1485-2537] -->
+<h3 class="sectionedit9"><a name="print_pinexpr_--_print" id="print_pinexpr_--_print">print [#pin:] [[expr][,]] -- print</a></h3>
+<div class="level3">
+
+<p>
+In its simplest form: print foo,bar will get you started.  But print has a lot of options, so please see the section on <a href="/wiki/printing" class="wikilink1" title="printing">Printing</a> for details.
+</p>
+<hr />
+
+</div>
+<!-- EDIT9 SECTION "print [#pin:] [[expr][,]] -- print" [2538-2735] -->
+<h3 class="sectionedit10"><a name="psprocess_status_--_print_a_list_of_running_background_functions" id="psprocess_status_--_print_a_list_of_running_background_functions">ps: &#039;process status&#039; -- print a list of running background functions</a></h3>
+<div class="level3">
+
+<p>
+Ps shows a list of running background functions.
+</p>
+<pre class="code">&gt; run t13
+&gt; ps
+0: t13</pre>
+<hr />
+
+</div>
+<!-- EDIT10 SECTION "ps: 'process status' -- print a list of running background functions" [2736-2908] -->
+<h3 class="sectionedit11"><a name="rmdelete_a_function_from_eeprom" id="rmdelete_a_function_from_eeprom">rm: delete a function from eeprom</a></h3>
+<div class="level3">
+<pre class="code">&gt; function blip {d13=!d13;}
+&gt; ls
+function blip {d13=!d13;}
+&gt; rm blip
+&gt; ls
+&gt;</pre>
+
+<p>
+Use “rm *” to erase the whole EEPROM.
+</p>
+<hr />
+
+</div>
+<!-- EDIT11 SECTION "rm: delete a function from eeprom" [2909-3088] -->
+<h3 class="sectionedit12"><a name="runrun_a_function_in_the_background" id="runrun_a_function_in_the_background">run: run a function in the background</a></h3>
+<div class="level3">
+
+<p>
+See the section on <a href="/wiki/functions:background" class="wikilink2" title="functions:background" rel="nofollow">Background functions</a> for details.
+</p>
+<pre class="code">&gt; run t13,125
+&gt; ps
+0: t13</pre>
+<hr />
+
+</div>
+<!-- EDIT12 SECTION "run: run a function in the background" [3089-3262] -->
+<h3 class="sectionedit13"><a name="stop_tasknum_stop_stop" id="stop_tasknum_stop_stop">stop tasknum | stop | stop *</a></h3>
+<div class="level3">
+
+<p>
+Stop a background task by number, stop the current task, or stop all tasks.
+</p>
+<pre class="code">&gt; run t13
+&gt; ps
+0: t13
+&gt; stop 0
+&gt; ps
+&gt;</pre>
+<hr />
+
+</div>
+<!-- EDIT13 SECTION "stop tasknum | stop | stop *" [3263-3438] -->
+<h3 class="sectionedit14"><a name="switch_expr_stmt0stmt1stmtn" id="switch_expr_stmt0stmt1stmtn">switch (expr) {stmt0; stmt1; ...; stmtN;}</a></h3>
+<div class="level3">
+
+<p>
+The switch statement is described in <a href="/wiki/conditionals" class="wikilink1" title="conditionals">Conditionals</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT14 SECTION "switch (expr) {stmt0; stmt1; ...; stmtN;}" [3439-3551] -->
+<h3 class="sectionedit15"><a name="while_expr_stmtstmt" id="while_expr_stmtstmt">while (expr) {stmt;...; stmt;}</a></h3>
+<div class="level3">
+
+<p>
+The while and if statements have their own <a href="/wiki/conditionals" class="wikilink1" title="conditionals">section</a>.
+</p>
+
+</div>
+<!-- EDIT15 SECTION "while (expr) {stmt;...; stmt;}" [3552-] -->

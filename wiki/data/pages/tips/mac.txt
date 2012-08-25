@@ -1,0 +1,5 @@
+=== Tips on using Bitlash, Arduino, and OS X ===
+
+== CoolTerm ==
+[[http://freeware.the-meiers.org/|CoolTerm]] is a very useful serial port terminal emulator for OS X.  I use it when the command-line __screen__ program falls short and starting [[:bitty.py]] is overkill.
+

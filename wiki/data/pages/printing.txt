@@ -1,0 +1,195 @@
+
+
+===== Printing Overview =====
+
+There are two ways to print in Bitlash: the legacy "print" command, and the printf() function.  The "print" command is handy for printing basic values without much formatting control; it was part of Bitlash 1.0 and is partly retained mainly for backwards compatibility.  The ":x" format specifier language will be deprecated in Bitlash 2.1, leaving only the printing of basic values.
+
+The printf() function is new in Bitlash 2.0.  It is more compatible with standard C and much more capable.  It will be the supported printing pathway going forward.
+
+
+===== printf("format string", value1, value2,... valueN); =====
+
+The printf() function prints values to the console.
+
+The values are printed under control of a format string, which must contain a specifier for each value to be printed.
+
+Specifiers are of the format:
+
+<code>
+Format Specifier := <percent-sign> [[<pad-char>] [<width>]] <specifier>
+Example: printf("%d", 7)	prints "7"
+Example: printf("%3d", 7)	prints "  7"
+Example: printf("%03d", 7)	prints "007"
+Example: printf("%s","Hello")	prints "Hello"
+Example: printf("%%")		prints "%"
+</code>
+
+----
+==== Table of Format Specifiers ====
+
+^Specifier^Print Format^Pad^
+|d|Decimal, signed|blank unless '0' is specified|
+|x|Hexadecimal|blank unless '0' is specified|
+|u|Decimal, unsigned|blank unless '0' is specified|
+|b|Binary|blank unless '0' is specified|
+|s|String|blank|
+|c|Character|the char|
+|#|Print-to-Pin|pin number is the passed value|
+|%|Print '%'| |
+
+----
+==== Special Characters ====
+
+The percent sign signals a format specifier in the string.  To print a percent sign, you must double it:
+
+<code>
+printf("%%")	 prints '%'
+</code>
+
+
+The printf() function does not automatically provide a newline at the end of printed output.  You must indicate line endings using the '\n' character:
+
+<code>
+printf("The time is: %d\n", millis);
+</code>
+
+You can specify arbitrary hex values in a string constant using \xHH notation:
+
+<code>
+printf("\x30");		prints '0'
+</code>
+
+
+Here is a summary of the special characters supported by Bitlash:
+
+^Char^Value^Description^
+|\r|0d|carriage return|
+|\n|0a|linefeed|
+|\t|09|tab|
+|\\|'\'|a backslash|
+|\"|'"'|a double quote|
+|\xHH|???|hex character specified by HH|
+
+----
+==== Padding ====
+
+Normally, numeric values and strings are pre-padded with blanks to fill out the specified field width.  You can pre-pad numeric values with zeroes instead by adding a zero before the width character:
+
+<code>
+printf("%03d", 7)	prints "007"
+</code>
+
+----
+==== The "*" character used as a width ====
+
+If the special character '*' is used in place of a width specifier, the next value in the passed-in value list is used as the width:
+
+<code>
+printf("%*d", 3, 7)		prints "  7" - padded to 3 characters with ' '
+</code>
+
+----
+==== Printing to Alternate Serial Pins ====
+
+You can redirect output to a non-standard serial pin using the '#' specifier, which picks up the pin number to use from the next value in the value list:
+
+<code>
+printf("%#%d", 4, 7)	prints "7" to pin 4 at the default 9600 baud
+</code>
+
+It's a kludge, but the width specifier can be used to override the default 9600 baud sending speed:
+
+<code>
+printf("%4800#%d", 4, 7)	prints "7" to pin 4 at 4800 baud
+</code>
+
+Specifying the baud rate in this way has the same effect as calling baud(4,4800): the pin will remain at the indicated baud rate until it is changed again.
+
+== Accessing Secondary UARTs with printf ==
+
+If you are using an Arduino Mega 1280 or Mega 2560 with Bitlash and you print to pin 18 then Bitlash will automatically use the Serial1 UART rather than software serial for I/O.  (There is currently no support in Bitlash for accessing Serial2 or Serial3 from printf.)
+
+Likewise if you are using a Sanguino with the AVR ATmega 644P processor, I/O to pin 11 will use the second UART of the Sanguino rather than software serial.
+
+
+
+
+
+===== The Print Comand =====
+
+This section documents the legacy Print command and its options.
+
+The print command will be retained in Bitlash going forward, but the ":x" sublanguage will be deprecated in a future version.  Users are advised to migrate to the printf() function with all due haste.
+
+----
+==== Basic Printing: a list of items ====
+
+The simplest form of the print command causes bitlash to print out a bunch of numeric values separated by spaces, followed by a newline:
+<code>
+> print 1, 2+2, 1<<3
+1 4 8
+>
+</code>
+The print command can print string constants as well as numeric expressions, as you may recall from the Hello World example:
+<code>
+> print "Hello, world!", 123
+Hello, world! 123
+</code>
+To suppress the blank and automatic end of line, print a single value followed by the comma, like this:
+<code>
+> print "Time:",		// Prints Time: with no trailing blank or newline
+</code>
+
+----
+==== Printing special characters ====
+
+The rules for special characters are similar to C.  See [[Language]] for details on constructing string constants with arbitrary ascii characters.
+
+----
+==== Hex, binary, and raw byte output ====
+
+You can specify a modifier to produce several different output types by appending ":spec" to any expression in a print statement.  Perhaps an example is quickest:
+<code>
+> print 33, 33:x, 33:b, 33:y, 33:*
+33 21 100001 ! *********************************
+</code>
+Here is a mapping to the Arduino equivalents for hex, binary, and raw byte output:
+^to print: ^Bitlash	^Arduino ^
+| print hex | print value:x | Serial.print(value, HEX)|
+|send ascii byte value | print value:y | Serial.print(value, BYTE)|
+|print binary | print value:b | Serial.print(value, BIN)|
+
+----
+
+==== Printing Bars ====
+
+You can print a bar of N '*' characters using the :* format specifier, as shown in the example above.  Any single-byte symbol will work (+-*/<>%:).
+Here's a cheap, low-res oscilloscope on pin A3 with adjustable temporal resolution:
+<code>
+> while 1: print map(a3,0,1024,10,50):*; delay(5)
+</code>
+
+----
+==== Serial Output to Alternate Pins: print #n:... ====
+
+Bitlash includes a software serial output capability which supports transmitting on any available output pin at a user-specified baud rate.  This makes it straightforward to integrate additional serial devices with an Arduino.
+
+You send output to an alternate output pin using the "print #n:" construct, where "n" is the Arduino pin number designator for the desired the output pin:
+<code>
+> print #6:"EMERGENCY DESTRUCT SEQUENCE ALPHA CONFIRMED"
+</code>
+
+By default bitlash will send output at 9600 baud.  If you require a different baud rate use the baud function:
+<code>
+> baud(4,4800)	    // set baud on pin 4 to 4800
+> print #4:"ATZ"    // send some stuff on pin 4
+</code>
+
+Note: print #n: is blocking: background tasks will pause while output is being printed.
+
+== Example: Clear the Screen on Sparkfun Serial LCD ==
+
+Here is an example combining the use of printing to an arbitrary pin, printing special characters, and (importantly!) suppressing the inter-item and inter-line spacing that bitlash would normally generate.  Assume the serial LCD is on pin 4 and that all pin setup and baud rate initialization has been performed.  Then this macro will clear the screen:
+<code>
+function cls {print #4:"\xfe\x01\",;}
+</code>

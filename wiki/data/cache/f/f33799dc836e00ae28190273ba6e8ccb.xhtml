@@ -1,0 +1,241 @@
+
+<h2 class="sectionedit1"><a name="the_bitlash_install_page" id="the_bitlash_install_page">The Bitlash Install Page</a></h2>
+<div class="level2">
+
+</div>
+<!-- EDIT1 SECTION "The Bitlash Install Page" [1-37] -->
+<h3 class="sectionedit2"><a name="requirements" id="requirements">Requirements</a></h3>
+<div class="level3">
+
+<p>
+You need an <a href="http://arduino.cc" class="urlextern" title="http://arduino.cc"  rel="nofollow">Arduino</a> connected to a PC with a working Arduino IDE.  These directions are for <a href="http://arduino.cc/en/Main/Software" class="urlextern" title="http://arduino.cc/en/Main/Software"  rel="nofollow">Arduino IDE version 0022 and the Arduino 1.0 Beta 4</a>, but they work for earlier versions back to 0017.
+</p>
+
+<p>
+Since Bitlash is an Arduino library you upload with a sketch, you need to be comfortable uploading sketches.  Get this working first to save debugging headaches.  There is plenty of help over at the <a href="http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl" class="urlextern" title="http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl"  rel="nofollow">Arduino Forums</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "Requirements" [38-585] -->
+<h3 class="sectionedit3"><a name="download_bitlash" id="download_bitlash">Download Bitlash</a></h3>
+<div class="level3">
+
+<p>
+The current version of Bitlash is available at the  <a href="/wiki/download" class="wikilink1" title="download">Download</a> page.
+</p>
+
+</div>
+<!-- EDIT3 SECTION "Download Bitlash" [586-693] -->
+<h3 class="sectionedit4"><a name="install_bitlash_using_git" id="install_bitlash_using_git">Install Bitlash using Git</a></h3>
+<div class="level3">
+
+<p>
+You can also grab the latest development version using Git, and clone it right into your libraries directory using the recipe below.  
+</p>
+
+<p>
+<strong>NOTE: Back up your existing Bitlash directory first!</strong>
+</p>
+<pre class="code">$ cd ~/Documents/Arduino/Libraries
+$ mv bitlash/ bitlash-save/
+$ git clone http://bitlash.net/git/bitlash.git</pre>
+
+<p>
+Restart the Arduino IDE and you&#039;re good to go.
+</p>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Install Bitlash using Git" [694-1103] -->
+<h3 class="sectionedit5"><a name="install_bitlash" id="install_bitlash">Install Bitlash</a></h3>
+<div class="level3">
+
+<p>
+The <a href="http://arduino.cc/en/Guide/Environment#libraries" class="urlextern" title="http://arduino.cc/en/Guide/Environment#libraries"  rel="nofollow">Arduino Development Environment Guide</a> specifies this procedure for installing third party libraries:
+</p>
+<pre class="code">&quot;To install these third-party libraries, create a directory
+called libraries within your sketchbook directory. Then unzip
+the library there.&quot;</pre>
+
+<p>
+There is also a <a href="http://arduino.cc/blog/?p=313" class="urlextern" title="http://arduino.cc/blog/?p=313"  rel="nofollow"> post on the Arduino weblog</a> with further explanation.
+</p>
+
+<p>
+So, to install Bitlash,
+</p>
+<ul>
+<li class="level1"><div class="li"> Create a directory called <strong>libraries</strong> within your sketchbook directory</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Unzip the download and copy or move the Bitlash distribution folder into the <strong>libraries</strong> folder you just created  Rename the resulting folder to simply <strong>bitlash</strong>, if necessary, to remove the version number.  You should end up with a folder setup that looks like this:</div>
+</li>
+</ul>
+
+<p>
+<a href="/wiki/_detail/installfolders.jpg?id=install" class="media" title="installfolders.jpg"><img src="/wiki/_media/installfolders.jpg" class="mediacenter" title="installfolders.jpg" alt="installfolders.jpg" /></a>
+</p>
+<ul>
+<li class="level1"><div class="li"> Restart the Arduino IDE; if all goes well, you will find the <strong>bitlash</strong> library listed in the <strong>Sketch / Import Library</strong> menu.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> Select <strong>File / Examples / bitlash / bitlashdemo</strong> to open the demo sketch, then <strong>File / Upload</strong> to compile and upload it to your Arduino.</div>
+</li>
+</ul>
+
+<p>
+When your upload is complete, you are ready to connect to Bitlash.  Proceed to the next section on Connecting.
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "Install Bitlash" [1104-2353] -->
+<h3 class="sectionedit6"><a name="connect_with_a_terminal_emulator" id="connect_with_a_terminal_emulator">Connect With a Terminal Emulator</a></h3>
+<div class="level3">
+
+<p>
+Connect to the serial port at 57600 baud using whatever terminal emulator works for you.  Here are some options:
+</p>
+<ul>
+<li class="level1"><div class="li"> You can use the built-in Arduino Serial Monitor, but see the note below</div>
+</li>
+<li class="level1"><div class="li"> On Windows, HyperTerminal seems popular</div>
+</li>
+<li class="level1"><div class="li"> On <acronym title="Operating System">OS</acronym> X I use <strong>screen</strong>, <a href="/wiki/tips:mac" class="wikilink1" title="tips:mac">CoolTerm</a>, and <a href="/wiki/bitty.py" class="wikilink1" title="bitty.py">bitty.py</a></div>
+</li>
+<li class="level1"><div class="li"> On Linux <strong>screen</strong> is available on most distributions</div>
+</li>
+</ul>
+
+</div>
+
+<h5><a name="noteusing_bitlash_with_the_arduino_serial_monitor" id="noteusing_bitlash_with_the_arduino_serial_monitor">NOTE: Using Bitlash with the Arduino Serial Monitor</a></h5>
+<div class="level5">
+
+<p>
+To use the Arduino “Serial Monitor” function with Bitlash, you must select “Carriage return” line ending handling option.  The Bitlash demos use a baud rate of 57600.
+</p>
+
+</div>
+
+<h5><a name="examplestarting_the_screen_command_with_bitlash" id="examplestarting_the_screen_command_with_bitlash">Example: Starting the screen command with Bitlash</a></h5>
+<div class="level5">
+
+<p>
+Here is an example using the <strong>screen</strong> program in <acronym title="Operating System">OS</acronym> X to connect with Bitlash on a USB-connected Arduino.  The /dev/tty.usb… part is the virtual serial port name that you can find in the Arduino Tools/Serial Port menu and the 57600 is the baud rate:
+</p>
+<pre class="code">$ screen /dev/tty.usbserial-A7003pQ3 57600
+bitlash 2.0 here! (c) 2011 Bill Roy -type HELP- 935 bytes free
+&gt; </pre>
+
+<p>
+Congratulations, you are up and running: Bitlash is listening for commands, as signified by the &#039;&gt;&#039; prompt.
+</p>
+<hr />
+
+</div>
+<!-- EDIT6 SECTION "Connect With a Terminal Emulator" [2354-3536] -->
+<h3 class="sectionedit7"><a name="hello_world" id="hello_world">Hello, World!</a></h3>
+<div class="level3">
+
+<p>
+Now that you have a command prompt you can type a command, and press Enter.  
+</p>
+
+<p>
+Here is the usual Hello World example you might run as your first Bitlash program:
+</p>
+<pre class="code">&gt; print &quot;Hello, world!&quot;
+Hello, world!
+&gt;</pre>
+
+<p>
+While you&#039;re there you might check the arithmetic:
+</p>
+<pre class="code">&gt; print 2+2
+4</pre>
+<hr />
+
+</div>
+<!-- EDIT7 SECTION "Hello, World!" [3537-3864] -->
+<h3 class="sectionedit8"><a name="first_appblink13" id="first_appblink13">First App: Blink13</a></h3>
+<div class="level3">
+
+<p>
+No discussion of “Hello, world!” for embedded systems would be complete without blinking an LED.  This example shows how to build a complete Bitlash application using Bitlash functions and auto-start.
+</p>
+
+<p>
+First it is necessary to introduce the concept of <strong>pin variables</strong>: Bitlash gives direct access to the digital IO pins via single-bit variables named d0, d1, d2, and so on.  You can read a pin variable&#039;s value and print it like this:
+</p>
+<pre class="code">&gt; print d12
+0</pre>
+
+<p>
+…and assign it like this:
+</p>
+<pre class="code">&gt; d13=1   // turn on pin 13</pre>
+
+<p>
+…though you must remember to set the pin mode if you want the port to be an output:
+</p>
+<pre class="code">&gt; pinmode(13,1)</pre>
+
+<p>
+So, returning to blink13, what we want is to toggle the pin periodically.  Let&#039;s define a <a href="/wiki/function" class="wikilink2" title="function" rel="nofollow">function</a> named <strong>toggle13</strong> to toggle the pin:
+</p>
+<pre class="code">&gt; function toggle13 {d13 = !d13;}</pre>
+
+<p>
+A <a href="/wiki/function" class="wikilink2" title="function" rel="nofollow">function</a> named <strong>toggle13</strong> containing the Bitlash code “d13=!d13;” is defined and saved in EEPROM.  When the function <strong>toggle13</strong> runs, this program text sets pin d13 to the logical complement of its current value: if it was zero, it becomes one, and vice versa.
+</p>
+
+<p>
+Now all we need is to arrange for <strong>toggle13</strong> to be run at the desired toggle rate, let&#039;s say every 1000 milliseconds; and let&#039;s not forget to set pin 13 as an output.  By using the special function name <strong>startup</strong> we designate this function to be automagically run at boot time, completing our application:
+</p>
+<pre class="code">function startup {pinmode(13,1); run toggle13,1000;}</pre>
+
+<p>
+List our functions to make sure they&#039;re right using the <a href="/wiki/commands" class="wikilink1" title="commands">ls</a> command:
+</p>
+<pre class="code">&gt; ls
+function toggle13 {d13 = !d13;};
+function startup {pinmode(13,1); run toggle13,1000;}
+&gt;</pre>
+
+<p>
+You can invoke the startup function from the command line to test:
+</p>
+<pre class="code">&gt; startup
+(the LED on pin d13 is blinking)</pre>
+
+<p>
+You can also restart to test the power-on startup:
+</p>
+<pre class="code">&gt; boot
+bitlash here! v2.0...
+(the LED on pin d13 is blinking)</pre>
+<hr />
+
+</div>
+<!-- EDIT8 SECTION "First App: Blink13" [3865-5853] -->
+<h3 class="sectionedit9"><a name="next_stepslearn_bitlash" id="next_stepslearn_bitlash">Next Steps: Learn Bitlash</a></h3>
+<div class="level3">
+
+<p>
+Congratulations!  If you get this far, you have a free-standing development environment on your Arduino.
+</p>
+
+<p>
+You will very likely find it useful to proceed to the <a href="/wiki/docindex" class="wikilink1" title="docindex">Documentation Index</a>.
+</p>
+
+<p>
+Happy Hacking!
+</p>
+
+</div>
+<!-- EDIT9 SECTION "Next Steps: Learn Bitlash" [5854-] -->

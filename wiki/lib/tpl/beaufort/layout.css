@@ -1,0 +1,102 @@
+/**
+ * Beaufort template for Dokuwiki
+ *
+ * @author Andreas Gohr <andi@splitbrain.org>
+ * @author moraes <moraes@tipos.com.br>
+ * Adjusted for the "Beaufort" Dokuwiki template by Rolf Deenen*/
+/* -------------- top row --------------- */
+div.dokuwiki .header {
+  background:  url('images/topbg__theme__.png') no-repeat;
+  padding: 20px 0px 0px 0px; 
+}
+
+div.dokuwiki .pagename {
+  float: left;
+  font-size: 50%;
+  font-weight: bolder;
+  color: __background_alt__;
+  text-align: left;
+  vertical-align: middle;
+  padding-top:6px;
+}
+
+
+div.dokuwiki .pagename a {
+  color: __extern__ !important;
+  text-decoration: none !important;
+  padding-top:6px;
+}
+
+div.dokuwiki .logo {
+  font-weight: bolder;
+  font-size: 250%;
+  margin-top: 12px;
+  margin-left: 12px;
+  margin-bottom: 0px;
+  float:left;
+  width: 80%;
+}
+
+
+div.dokuwiki .logo a {
+  color: __background_alt__ !important;
+  text-decoration: none !important;
+  font-variant: small-caps;
+  letter-spacing: 1pt;
+}
+
+div.dokuwiki .rssicon {
+  float: right;
+  padding: 1em 1em 0em 0em;
+}
+
+/* ---------------  top and bottom bar ---------------- */
+div.dokuwiki .bar {
+  background: url('images/hdr__theme__.png');	
+  height: 100px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 40px 0px 40px;
+  clear: both;
+}
+
+div.dokuwiki .bar-left {
+  float: left;
+}
+
+
+
+div.dokuwiki .bar-right {
+  float: right;
+  color: __background_alt__;
+}
+
+
+div.dokuwiki #bar__bottom {
+  color: __background_alt__;
+  height: 3em;
+}
+
+div.dokuwiki #bar__bottomright {
+  color: __background_alt__;
+  }
+
+
+/* ------------- File Metadata ----------------------- */
+
+div.dokuwiki div.meta {
+  clear: both;
+  margin-top: 1em;
+  color: __text_alt__;
+  font-size: 70%;
+}
+
+div.dokuwiki div.meta div.user {
+  float: left;
+  margin: 0px 40px 0px 40px;
+}
+
+div.dokuwiki div.meta div.doc {
+  text-align: right;
+  margin: 0px 40px 0px 40px;
+}
+

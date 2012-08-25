@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generator="FeedCreator 1.7.2-ppt DokuWiki" -->
+<?xml-stylesheet href="http://bitlash.net/wiki/lib/exe/css.php?s=feed" type="text/css"?>
+<rdf:RDF
+    xmlns="http://purl.org/rss/1.0/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel rdf:about="http://bitlash.net/wiki/feed.php">
+        <title>Bitlash Online</title>
+        <description></description>
+        <link>http://bitlash.net/wiki/</link>
+        <image rdf:resource="http://bitlash.net/wiki/lib/images/favicon.ico" />
+       <dc:date>2011-05-17T03:58:14-07:00</dc:date>
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/start?rev=1299430870&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/architecture?rev=1298670672&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/docindex?rev=1298670520&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/sightings?rev=1298116721&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/about?rev=1298116655&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/api?rev=1297001461&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/install?rev=1296944594&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/bitlashfunctions?rev=1296944242&amp;do=diff"/>
+            </rdf:Seq>
+        </items>
+    </channel>
+    <image rdf:about="http://bitlash.net/wiki/lib/images/favicon.ico">
+        <title>Bitlash Online</title>
+        <link>http://bitlash.net/wiki/</link>
+        <url>http://bitlash.net/wiki/lib/images/favicon.ico</url>
+    </image>
+    <item rdf:about="http://bitlash.net/wiki/start?rev=1299430870&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-03-06T09:01:10-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>start - [What is Bitlash?] </title>
+        <link>http://bitlash.net/wiki/start?rev=1299430870&amp;do=diff</link>
+        <description>Bitlash Online
+
+Quick Start
+
+	*  [Download Bitlash 2.0 RC2]
+	*  Install Bitlash and upload it to your Arduino
+	*  Proceed to the Documentation Index
+	*  Jump to the Built-in Functions Reference page
+
+	*  Read more About Bitlash and the Author
+
+----------
+
+What is Bitlash?
+
+
+Bitlash is an open source interpreted language shell and embedded programming environment.  This website documents Bitlash for the popular and useful Arduino.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/architecture?rev=1298670672&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-25T13:51:12-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>architecture</title>
+        <link>http://bitlash.net/wiki/architecture?rev=1298670672&amp;do=diff</link>
+        <description>Here is an architectural overview of Bitlash and its relationship to the other elements of the Arduino:</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/docindex?rev=1298670520&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-25T13:48:40-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>docindex - [Integrating Bitlash] </title>
+        <link>http://bitlash.net/wiki/docindex?rev=1298670520&amp;do=diff</link>
+        <description>Bitlash Documentation Index
+
+To Begin
+
+	*  Download the latest release of Bitlash
+	*  How to install Bitlash
+
+	*  Please note the Bitlash license terms
+
+
+Learning Bitlash
+
+	*  About the language 
+
+	*  Conditionals: if, while, and switch 
+
+	*  Top-level commands
+
+	*  Built-in Functions
+
+	*  Printing
+
+	*  Writing Bitlash Functions
+	*  Run a function in the background</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/sightings?rev=1298116721&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-19T03:58:41-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>sightings</title>
+        <link>http://bitlash.net/wiki/sightings?rev=1298116721&amp;do=diff</link>
+        <description>Bitlash Sightings
+
+
+Here are some links to interesting things people have done with Bitlash.
+
+Send us your link and we'll be happy to include it.
+
+* Rugged Circuits sells a family of products called the GATOR Board based on the Atmel ATMega324P and has been kind enough to link to Bitlash on their software page.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/about?rev=1298116655&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-19T03:57:35-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>about - [Oddboards.com] </title>
+        <link>http://bitlash.net/wiki/about?rev=1298116655&amp;do=diff</link>
+        <description>About Bitlash
+
+
+Bitlash was written by Bill Roy and is Copyright 2011 Palmeta Productions, LLC.
+
+Bitlash is made available under an Open Source license; see the License here.  Alternate commercial license terms are available from the Author.
+
+
+The Entropymouse Capers
+
+
+The author writes from time to time about Bitlash and other things which escape from his laboratory at his weblog, The Entropymouse Capers.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/api?rev=1297001461&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-06T06:11:01-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>api</title>
+        <link>http://bitlash.net/wiki/api?rev=1297001461&amp;do=diff</link>
+        <description>Bitlash API
+
+
+Your Arduino C program can interact with Bitlash using the functions documented here.
+Of course, in the tiny and open world of Arduino most everything is visible globally.  So feel free to dive in and call what you need.  The entry points documented here are intended to be reasonably well hardened for third party use.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/install?rev=1296944594&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T14:23:14-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>install - [Connect With a Terminal Emulator] </title>
+        <link>http://bitlash.net/wiki/install?rev=1296944594&amp;do=diff</link>
+        <description>The Bitlash Install Page
+
+Requirements
+
+
+You need an Arduino connected to a PC with a working Arduino IDE.  These directions are for Arduino IDE version 0022, but they work for earlier versions back to 0017.
+
+Since Bitlash is an Arduino library you upload with a sketch, you need to be comfortable uploading sketches.  Get this working first to save debugging headaches.  There is plenty of help over at the Arduino Forums.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/bitlashfunctions?rev=1296944242&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T14:17:22-07:00</dc:date>
+        <dc:creator>wikiops</dc:creator>
+        <title>bitlashfunctions - [Run a function: background] </title>
+        <link>http://bitlash.net/wiki/bitlashfunctions?rev=1296944242&amp;do=diff</link>
+        <description>Bitlash Functions
+
+
+Bitlash allows you to store and manage Bitlash Functions in the Arduino's EEPROM.  By defining new functions, you extend Bitlash to suit your application.
+
+Think of a function as a stored command line.  In Bitlash, that can be multiple statements.  And a statement within a function can call a function, so function execution can nest like subroutine calls (up to a dozen levels deep or so).
+But the simplest use is simply to give a name to a sequence of commands.</description>
+    </item>
+</rdf:RDF>

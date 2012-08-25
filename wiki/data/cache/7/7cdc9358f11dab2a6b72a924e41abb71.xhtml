@@ -1,0 +1,139 @@
+
+<h2 class="sectionedit1"><a name="the_bitlash_language" id="the_bitlash_language">The Bitlash Language</a></h2>
+<div class="level2">
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "The Bitlash Language" [1-39] -->
+<h3 class="sectionedit2"><a name="how_it_worksthe_bitlash_execution_model" id="how_it_worksthe_bitlash_execution_model">How It Works: The Bitlash Execution Model</a></h3>
+<div class="level3">
+
+<p>
+It helps to start by thinking of Bitlash as a dumb command line calculator.  You type a line of commands and press Enter; Bitlash interprets the line and returns you to the prompt.
+</p>
+
+<p>
+It may help to formalize the idea of <a href="/wiki/bitlashfunctions" class="wikilink1" title="bitlashfunctions">Bitlash Functions</a> a little bit, too.  A function is a command line, with a name, stored in EEPROM.  When you invoke to a function by using its name, Bitlash suspends what it&#039;s doing working your main command to execute the function, which is interpreted just as though you typed the function&#039;s text.  Effectively it is a subroutine call.
+</p>
+
+<p>
+Think of background functions as stored command lines scheduled to be run periodically.  When you say <strong>run toggle13,1000</strong>, it means “whatever else may be happening, please execute the <strong>toggle13</strong> function about every 1000 milliseconds.”
+</p>
+
+</div>
+<!-- EDIT2 SECTION "How It Works: The Bitlash Execution Model" [40-912] -->
+<h3 class="sectionedit3"><a name="grammar_from_the_top_down" id="grammar_from_the_top_down">Grammar, from the top down</a></h3>
+<div class="level3">
+
+<p>
+So, then, a little more formally:
+</p>
+
+<p>
+A command line is one or more statements separated by semicolons.
+</p>
+
+<p>
+A statement, in turn, is either a command, an assignment, or an expression.
+</p>
+
+<p>
+A command is one of: [boot help if ls peep print ps rm run snooze stop switch while].  See <a href="/wiki/commands" class="wikilink1" title="commands">Commands</a> for details.
+</p>
+
+<p>
+An assignment is of the form variable = expression.
+</p>
+
+<p>
+Read on for more on variables, expressions, and operators.
+</p>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "Grammar, from the top down" [913-1365] -->
+<h3 class="sectionedit4"><a name="built-in_numeric_variablesa__z" id="built-in_numeric_variablesa__z">Built-in Numeric Variables: [&#039;a&#039;..&#039;z&#039;]</a></h3>
+<div class="level3">
+
+<p>
+You get 26 built-in 32-bit signed integer variable named lowercase &#039;a&#039; through lowercase &#039;z&#039;.  These variables are initialized to zero at boot time like any other C storage.
+</p>
+<pre class="code">&gt; i=10; while i-- print i, 
+9876543210&gt; </pre>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Built-in Numeric Variables: ['a'..'z']" [1366-1651] -->
+<h3 class="sectionedit5"><a name="pin_variablesnames_for_the_arduino_pins_a0a7_and_d0d22" id="pin_variablesnames_for_the_arduino_pins_a0a7_and_d0d22">Pin Variables: Names for the Arduino Pins [a0..a7] and [d0..d22]</a></h3>
+<div class="level3">
+
+<p>
+You can refer to specific analog and digital pins using <strong>pin variables</strong>.  Pin variables are of the form a0, a1, a2, … a7 and d0, d1, d2, … d22.
+When a pin variable is used in an expression it is a shorthand for digitalRead (for the d0.d22 pin variables) or analogRead (for a0..a7).
+</p>
+<pre class="code">&gt; x=d4		// digitalRead(4) and save it in x
+&gt; print x, a6	// print digitalRead(4) and analogRead(6)</pre>
+
+<p>
+Assigning to a digital pin variable does as you would expect: it turns the output on or off, just like digitalWrite.
+</p>
+<pre class="code">&gt; d13 = 1		// turn on D13</pre>
+
+<p>
+Assigning to the a-pin variables is a little tricky.  You might think from the name that it does some sort of output to an analog pin.  But, not so.  Assigning to an analog pin variable does analogWrite, which is PWM output to a DIGITAL <acronym title="Personal Identification Number">PIN</acronym>!!
+</p>
+<pre class="code">&gt; pinmode(5, 1)	// set D5 to digital output mode
+&gt; a5 = 128	// generate 50% duty cycle PWM on pin 5</pre>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "Pin Variables: Names for the Arduino Pins [a0..a7] and [d0..d22]" [1652-2651] -->
+<h3 class="sectionedit6"><a name="numeric_constants" id="numeric_constants">Numeric Constants</a></h3>
+<div class="level3">
+
+<p>
+Decimal signed numeric constants in the range of a 32-bit signed integer are supported as you would expect.
+Hex constants of the form 0xHHHHHHHH also work, as do single-quoted ascii character constants like &#039;q&#039;.
+Binary constants of the form 0b01010101 are also supported.
+</p>
+<hr />
+
+</div>
+<!-- EDIT6 SECTION "Numeric Constants" [2652-2958] -->
+<h3 class="sectionedit7"><a name="string_constants" id="string_constants">String Constants</a></h3>
+<div class="level3">
+
+<p>
+String constants can be used within the Print statement.  A string standing alone is treated as a comment and ignored.
+The rules for special characters in string constants are similar to C.  The backslash character specifies that an escape sequence is to follow.  Here are the supported escapes:
+</p>
+<pre class="code">\r		0d		carriage return
+\n		0a		linefeed
+\t		09		tab
+\\		&#039;\&#039;		a backslash
+\&quot;		&#039;&quot;&#039;		a double quote
+\xHH	???		hex character specified by HH</pre>
+
+<p>
+For example, some terminal emulators will beep if you send them an Ascii BEL character (07):
+</p>
+<pre class="code">&gt; print &quot;\x07&quot;,		// beep!</pre>
+
+<p>
+The hex form is especially useful in crafting escape sequences to print to peripheral devices.
+</p>
+<hr />
+
+</div>
+<!-- EDIT7 SECTION "String Constants" [2959-3670] -->
+<h3 class="sectionedit8"><a name="operators_and_precedence" id="operators_and_precedence">Operators and Precedence</a></h3>
+<div class="level3">
+
+<p>
+Bitlash supports a very complete subset of the C operator suite, with very similar precedence rules.
+Here are the supported operators, with meanings as in standard C:
+</p>
+<pre class="code"> + - * / ( ) &lt; &lt;= &gt; &gt;= == != &lt;&lt; &gt;&gt; ^ &amp; | ++ --</pre>
+
+</div>
+<!-- EDIT8 SECTION "Operators and Precedence" [3671-] -->

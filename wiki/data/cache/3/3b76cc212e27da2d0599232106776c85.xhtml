@@ -1,0 +1,430 @@
+
+<h2 class="sectionedit1"><a name="bittypy" id="bittypy">bitty.py</a></h2>
+<div class="level2">
+
+<p>
+The python program known as <strong>bitty.py</strong> is a serial port proxy.  It runs on an Arduino-connected PC and makes the Arduino available over the network for connection via telnet, nc, or your favorite telnet client.
+</p>
+
+<p>
+With Bitty you can make your Arduino available on the Internet with no extra hardware.
+</p>
+
+<p>
+There are some nice features for Arduino users.  You can unplug one Arduino and plug in another and bitty will find it.  And the network port and baud rate are adjustable.
+</p>
+
+</div>
+<!-- EDIT1 SECTION "bitty.py" [1-497] -->
+<h3 class="sectionedit2"><a name="requirements" id="requirements">Requirements</a></h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> <a href="http://python.org" class="urlextern" title="http://python.org"  rel="nofollow">python</a> 2.4 or 2.5</div>
+</li>
+<li class="level1"><div class="li"> pySerial from <a href="http://sourceforge.net/projects/pyserial/files/" class="urlextern" title="http://sourceforge.net/projects/pyserial/files/"  rel="nofollow">SourceForge</a></div>
+</li>
+</ul>
+
+</div>
+<!-- EDIT2 SECTION "Requirements" [498-648] -->
+<h3 class="sectionedit3"><a name="usage" id="usage">Usage</a></h3>
+<div class="level3">
+
+<p>
+To use: first, start the serial-to-net proxy and leave it running:
+</p>
+<pre class="code">$ python bitty.py [options]</pre>
+
+<p>
+…and then, in another terminal window, connect to it with your favorite telnet or nc program:
+</p>
+<pre class="code">$ nc localhost 8080
+$ telnet localhost 8080
+$ telnet arduino.bitlash.net 8080</pre>
+
+<p>
+Plug in Arduino via the USB-to-serial cable and you should connect up automatically.
+</p>
+
+<p>
+<strong>Note:</strong> Type &#039;logout&#039; when done for a clean disconnect.
+</p>
+
+</div>
+<!-- EDIT3 SECTION "Usage" [649-1111] -->
+<h3 class="sectionedit4"><a name="options" id="options">Options</a></h3>
+<div class="level3">
+
+<p>
+Run Bitty with the ”–help” option to see a list of options:
+</p>
+<pre class="code">Arduino.app/.../library/bitlash/extras bill$ python bitty.py --help
+Usage: bitty.py [options]
+
+Options:
+  -h, --help            show this help message and exit
+  -p PORT, --port=PORT  network connection port [8080]
+  -u USBDEVICE, --usbdevice=USBDEVICE
+                        name of USB serial port device for serial connection
+                        [/dev/tty.usbserial*]
+  -b BAUD, --baud=BAUD  baud rate for port specified by -u [57600]
+  -k, --keyboard-passthru
+  -d, --debug           </pre>
+
+</div>
+
+<h5><a name="p_--portset_network_port" id="p_--portset_network_port">-p, --port: set network port</a></h5>
+<div class="level5">
+
+<p>
+Bitty normally listens for incoming connections on port 8080.  If you want to use a different port, specify it like this:
+</p>
+<pre class="code">$ python bitty.py -p 1234</pre>
+
+</div>
+
+<h5><a name="u_--usbdeviceset_usb_device_name" id="u_--usbdeviceset_usb_device_name">-u, --usbdevice: set usb device name</a></h5>
+<div class="level5">
+
+<p>
+To specify a particular usb device you can identify it like this:
+</p>
+<pre class="code">$ python bitty.py -u TTYUSB0</pre>
+
+</div>
+
+<h5><a name="b_--baudset_serial_port_baud_rate" id="b_--baudset_serial_port_baud_rate">-b, --baud: set serial port baud rate</a></h5>
+<div class="level5">
+
+<p>
+Bitlash, by default, listens at 57600, so Bitty tries to connect at that rate.  You can use a different rate by specifying it like this:
+</p>
+<pre class="code">$ python bitty.py -b 115200</pre>
+
+</div>
+
+<h5><a name="k_--keyboard-passthru" id="k_--keyboard-passthru">-k, --keyboard-passthru</a></h5>
+<div class="level5">
+
+<p>
+This enables local keyboard input from the console running Bitty (in addition to the normal input from a remote network-connected user).  You can use this option to turn Bitty into a terminal emulator.  You can also use it for a “two steering wheel” setup: the remote user can type, and so can you.
+</p>
+<pre class="code">$ python bitty.py -k</pre>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Options" [1112-2656] -->
+<h3 class="sectionedit5"><a name="source_code_for_bittypy" id="source_code_for_bittypy">Source Code for bitty.py</a></h3>
+<div class="level3">
+<dl class="file">
+<dt><a href="/wiki/_export/code/bitty.py?codeblock=7" title="Download Snippet" class="mediafile mf_py">bitty.py</a></dt>
+<dd><pre class="code file python"><span class="co1">#! /usr/bin/python</span>
+<span class="co1">#</span>
+<span class="co1">#	bitty.py: serial-to-network multiplexer for Arduino</span>
+<span class="co1">#</span>
+<span class="co1">#	This is a serial port proxy.  It makes a usbserial port available over the network</span>
+<span class="co1">#	for connection via telnet, nc, or your favorite telnet client.</span>
+<span class="co1">#</span>
+<span class="co1">#	There are some nice features for Arduino users.  You can unplug one Arduino and</span>
+<span class="co1">#	plug in another and bitty will find it.  And the network port and baud rate are</span>
+<span class="co1">#	adjustable.</span>
+<span class="co1">#</span>
+<span class="co1">#	Requires:</span>
+<span class="co1">#		python 2.4 or 2.5</span>
+<span class="co1">#		pyserial from http://pyserial.wiki.sourceforge.net/pySerial</span>
+<span class="co1">#			tested with pyserial 2.4 on OS X and Fedora 4</span>
+<span class="co1">#</span>
+<span class="co1">#	To use: first, start the serial-to-net proxy and leave it running:</span>
+<span class="co1">#		$ python bitty.py [options]</span>
+<span class="co1">#</span>
+<span class="co1">#	and then, in another terminal window, connect to it with your favorite telnet or nc program:</span>
+<span class="co1">#		$ nc localhost 8080</span>
+<span class="co1">#		$ telnet localhost 8080</span>
+<span class="co1">#		$ telnet arduino.bitlash.net 8080</span>
+<span class="co1">#</span>
+<span class="co1">#	plug in Arduino and you should connect up automatically.</span>
+<span class="co1">#	Type 'logout' when done for a clean disconnect.</span>
+<span class="co1">#</span>
+<span class="co1">#</span>
+<span class="co1">#	LICENSE</span>
+<span class="co1">#</span>
+<span class="co1">#	Copyright 2010 by Bill Roy</span>
+<span class="co1">#</span>
+<span class="co1">#	Permission is hereby granted, free of charge, to any person</span>
+<span class="co1">#	obtaining a copy of this software and associated documentation</span>
+<span class="co1">#	files (the &quot;Software&quot;), to deal in the Software without</span>
+<span class="co1">#	restriction, including without limitation the rights to use,</span>
+<span class="co1">#	copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="co1">#	copies of the Software, and to permit persons to whom the</span>
+<span class="co1">#	Software is furnished to do so, subject to the following</span>
+<span class="co1">#	conditions:</span>
+<span class="co1">#	</span>
+<span class="co1">#	The above copyright notice and this permission notice shall be</span>
+<span class="co1">#	included in all copies or substantial portions of the Software.</span>
+<span class="co1">#	</span>
+<span class="co1">#	THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,</span>
+<span class="co1">#	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES</span>
+<span class="co1">#	OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</span>
+<span class="co1">#	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT</span>
+<span class="co1">#	HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,</span>
+<span class="co1">#	WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING</span>
+<span class="co1">#	FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR</span>
+<span class="co1">#	OTHER DEALINGS IN THE SOFTWARE.</span>
+<span class="co1">#</span>
+<span class="co1">###############################################################################</span>
+&nbsp;
+__version__ = <span class="st0">'1.0'</span>
+__copyright__ = <span class="st0">'Copyright 2010 by Bill Roy'</span>
+&nbsp;
+<span class="kw1">import</span> serial, <span class="kw3">time</span>, <span class="kw3">socket</span>, <span class="kw3">commands</span>, <span class="kw3">traceback</span>, <span class="kw3">os</span>, <span class="kw3">sys</span>
+&nbsp;
+<span class="co1"># serial port config</span>
+usbdevice = <span class="kw2">None</span>
+baud = <span class="nu0">57600</span>
+&nbsp;
+<span class="co1"># network config</span>
+port = <span class="nu0">8080</span>
+&nbsp;
+<span class="co1"># options</span>
+kbdpassthru = <span class="kw2">False</span>
+showflow = <span class="kw2">False</span>
+&nbsp;
+&nbsp;
+<span class="co1"># change below here at your own risk</span>
+serialport = <span class="kw2">None</span>
+netsocket = <span class="kw2">None</span>
+netclient = <span class="kw2">None</span>
+clientaddress = <span class="kw2">None</span>
+&nbsp;
+<span class="co1"># Net pump thread, and queued interface</span>
+<span class="kw1">import</span> <span class="kw3">Queue</span>
+netq = <span class="kw3">Queue</span>.<span class="kw3">Queue</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+serialq = <span class="kw3">Queue</span>.<span class="kw3">Queue</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+&nbsp;
+<span class="kw1">def</span> closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>:
+	<span class="kw1">global</span> serialport
+	<span class="kw1">if</span> serialport <span class="kw1">and</span> serialport.<span class="me1">isOpen</span><span class="br0">&#40;</span><span class="br0">&#41;</span>: 
+		<span class="kw1">print</span> <span class="st0">&quot;Closing: &quot;</span>, serialport.<span class="me1">portstr</span>
+		<span class="kw1">try</span>:
+			<span class="kw1">if</span> netclient: 
+				netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;Closing &quot;</span><span class="br0">&#41;</span>
+				netclient.<span class="me1">send</span><span class="br0">&#40;</span>serialport.<span class="me1">portstr</span><span class="br0">&#41;</span>
+				netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;<span class="es0">\r</span><span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+		<span class="kw1">except</span>: <span class="kw1">pass</span>
+		serialport.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+&nbsp;
+<span class="kw1">def</span> openSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>:
+	<span class="kw1">global</span> serialport
+	closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+&nbsp;
+	<span class="co1"># serial port autoconfig</span>
+	device = usbdevice					 <span class="co1"># command line overrides auto select</span>
+	<span class="kw1">if</span> <span class="kw1">not</span> device:
+		devicelist = <span class="kw3">commands</span>.<span class="me1">getoutput</span><span class="br0">&#40;</span><span class="st0">&quot;ls /dev/tty.usbserial*&quot;</span><span class="br0">&#41;</span>
+		<span class="co1">#devicelist = commands.getoutput(&quot;ls /dev/ttyUSB*&quot;)		# this works on the XO/Fedora</span>
+&nbsp;
+		<span class="kw1">if</span> devicelist<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span> == <span class="st0">'/'</span>: device = devicelist
+	<span class="kw1">if</span> <span class="kw1">not</span> device: 
+		<span class="kw1">print</span> <span class="st0">&quot;Waiting for device...&quot;</span>
+		<span class="kw1">return</span> <span class="kw2">False</span>
+&nbsp;
+	<span class="kw1">print</span> <span class="st0">&quot;Connecting to&quot;</span>, device, baud, <span class="st0">&quot;...&quot;</span>
+	<span class="kw1">if</span> netclient:
+		netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">'Connecting to '</span><span class="br0">&#41;</span><span class="sy0">;</span>
+		netclient.<span class="me1">send</span><span class="br0">&#40;</span>device<span class="br0">&#41;</span><span class="sy0">;</span>
+		netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">'... '</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="kw1">try</span>:
+		<span class="co1"># two stop bits helps paste-to-terminal not lose characters</span>
+		serialport = serial.<span class="me1">Serial</span><span class="br0">&#40;</span>device, baud, timeout=<span class="nu0">0</span>, stopbits=serial.<span class="me1">STOPBITS_TWO</span><span class="br0">&#41;</span>
+		<span class="kw1">print</span> <span class="st0">'Opened port: '</span>, serialport.<span class="me1">portstr</span>
+		<span class="kw1">if</span> netclient:
+			netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;connected.<span class="es0">\r</span><span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span>
+	<span class="kw1">except</span>:
+		<span class="kw1">print</span> <span class="st0">'Failed to open port'</span>
+		<span class="kw1">if</span> netclient:
+			netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;failed.<span class="es0">\r</span><span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span>
+		<span class="kw1">return</span> <span class="kw2">False</span>
+	<span class="kw1">return</span> <span class="kw2">True</span>
+&nbsp;
+&nbsp;
+<span class="co1"># thread to read and queue serial input</span>
+<span class="co1"># assumes opening the serial port is handled elsewhere</span>
+<span class="kw1">def</span> serialPumpTask<span class="br0">&#40;</span>usbdevice, baud<span class="br0">&#41;</span>:
+	<span class="kw1">while</span> <span class="kw2">True</span>:
+		<span class="kw1">if</span> serialport <span class="kw1">and</span> serialport.<span class="me1">isOpen</span><span class="br0">&#40;</span><span class="br0">&#41;</span>:
+			<span class="kw1">try</span>:
+				data = serialport.<span class="me1">read</span><span class="br0">&#40;</span><span class="nu0">1024</span><span class="br0">&#41;</span><span class="sy0">;</span>
+				<span class="kw1">if</span> data:
+					<span class="kw1">if</span> showflow: <span class="kw1">print</span> <span class="st0">&quot;SER:&quot;</span>,data
+					serialq.<span class="me1">put</span><span class="br0">&#40;</span>data<span class="br0">&#41;</span>
+				<span class="kw1">else</span>:
+					<span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">0.1</span><span class="br0">&#41;</span>
+			<span class="kw1">except</span>:
+				<span class="kw1">print</span> <span class="st0">&quot;Exception reading serial port&quot;</span>
+				<span class="kw3">traceback</span>.<span class="me1">print_exc</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+				closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>
+		<span class="kw1">else</span>:
+			<span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">1.0</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="kw1">def</span> kbdPumpTask<span class="br0">&#40;</span>d1,d2<span class="br0">&#41;</span>:
+	<span class="kw1">while</span> <span class="kw2">True</span>:
+		<span class="kw1">try</span>:
+			netq.<span class="me1">put</span><span class="br0">&#40;</span><span class="kw3">os</span>.<span class="me1">read</span><span class="br0">&#40;</span><span class="kw3">sys</span>.<span class="me1">stdin</span>.<span class="me1">fileno</span><span class="br0">&#40;</span><span class="br0">&#41;</span>, <span class="nu0">1</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+		<span class="kw1">except</span>:
+			<span class="kw1">print</span> <span class="st0">&quot;Exception in keyboard handler&quot;</span>
+			<span class="kw3">traceback</span>.<span class="me1">print_exc</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+<span class="co1"># send network data to the serial port</span>
+<span class="kw1">def</span> handleNetworkInput<span class="br0">&#40;</span>data<span class="br0">&#41;</span>:
+	<span class="kw1">global</span> serialport
+	<span class="kw1">try</span>:
+		<span class="kw1">if</span> serialport <span class="kw1">and</span> serialport.<span class="me1">isOpen</span><span class="br0">&#40;</span><span class="br0">&#41;</span>: 
+			<span class="co1">#serialport.write(data);</span>
+			<span class="kw1">for</span> i <span class="kw1">in</span> <span class="kw2">range</span><span class="br0">&#40;</span><span class="kw2">len</span><span class="br0">&#40;</span>data<span class="br0">&#41;</span><span class="br0">&#41;</span>: 
+				serialport.<span class="me1">write</span><span class="br0">&#40;</span>data<span class="br0">&#91;</span>i<span class="br0">&#93;</span><span class="br0">&#41;</span>
+				<span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">0.05</span><span class="br0">&#41;</span>
+	<span class="kw1">except</span>:
+		<span class="kw1">print</span> <span class="st0">&quot;Exception writing serial port&quot;</span>
+		<span class="kw3">traceback</span>.<span class="me1">print_exc</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+		closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+&nbsp;
+<span class="co1"># send serial port data to the network socket</span>
+<span class="kw1">def</span> handleSerialInput<span class="br0">&#40;</span>data<span class="br0">&#41;</span>:
+	<span class="kw1">global</span> netclient
+	<span class="kw1">try</span>:
+		<span class="kw1">if</span> netclient: netclient.<span class="me1">send</span><span class="br0">&#40;</span>data<span class="br0">&#41;</span>
+		<span class="kw1">if</span> kbdpassthru: 
+			<span class="kw3">sys</span>.<span class="me1">stdout</span>.<span class="me1">write</span><span class="br0">&#40;</span>data<span class="br0">&#41;</span>
+			<span class="kw3">sys</span>.<span class="me1">stdout</span>.<span class="me1">flush</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+	<span class="kw1">except</span>:
+		<span class="kw1">print</span> <span class="st0">&quot;Exception writing network port&quot;</span>
+		<span class="kw3">traceback</span>.<span class="me1">print_exc</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+		closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+&nbsp;
+<span class="co1"># thread to read and queue network input</span>
+<span class="kw1">def</span> netPumpTask<span class="br0">&#40;</span>port, dummy<span class="br0">&#41;</span>:
+&nbsp;
+	<span class="kw1">global</span> netsocket, netclient, clientaddress
+	netsocket = <span class="kw3">socket</span>.<span class="kw3">socket</span><span class="br0">&#40;</span><span class="kw3">socket</span>.<span class="me1">AF_INET</span>, <span class="kw3">socket</span>.<span class="me1">SOCK_STREAM</span><span class="br0">&#41;</span>
+	netsocket.<span class="me1">setsockopt</span><span class="br0">&#40;</span><span class="kw3">socket</span>.<span class="me1">SOL_SOCKET</span>, <span class="kw3">socket</span>.<span class="me1">SO_REUSEADDR</span>, <span class="nu0">1</span><span class="br0">&#41;</span>
+	<span class="co1">#socket.setblocking(0)</span>
+	netsocket.<span class="me1">bind</span><span class="br0">&#40;</span><span class="br0">&#40;</span><span class="st0">''</span>, port<span class="br0">&#41;</span><span class="br0">&#41;</span> 
+	netsocket.<span class="me1">listen</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span> 	<span class="co1"># allow no waiting connections</span>
+&nbsp;
+	<span class="kw1">while</span> <span class="kw2">True</span>: 
+		<span class="kw1">try</span>:
+			<span class="kw1">print</span> <span class="st0">&quot;Listening for network connection on&quot;</span>, <span class="kw3">socket</span>.<span class="me1">getfqdn</span><span class="br0">&#40;</span><span class="br0">&#41;</span>, <span class="st0">':'</span>, port, <span class="st0">'/'</span>, <span class="kw3">socket</span>.<span class="me1">gethostname</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+			netclient, clientaddress = netsocket.<span class="me1">accept</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+			<span class="kw1">print</span> <span class="st0">&quot;Connection from&quot;</span>, clientaddress
+			netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;g'day from bitty &quot;</span><span class="br0">&#41;</span>
+			netclient.<span class="me1">send</span><span class="br0">&#40;</span>__version__<span class="br0">&#41;</span>
+			netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot; -- type 'logout' to disconnect&quot;</span><span class="br0">&#41;</span>
+			netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;<span class="es0">\r</span><span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+			<span class="kw1">while</span> <span class="kw2">True</span>:
+				<span class="kw1">if</span> <span class="kw1">not</span> netclient: <span class="kw1">break</span>		<span class="co1"># client went away: go get another one</span>
+				<span class="kw1">while</span> <span class="kw1">not</span> openSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>:
+					netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;Waiting for device...<span class="es0">\r</span><span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+					<span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+				<span class="kw1">while</span> serialport.<span class="me1">isOpen</span><span class="br0">&#40;</span><span class="br0">&#41;</span>:
+					data = netclient.<span class="me1">recv</span><span class="br0">&#40;</span><span class="nu0">10240</span><span class="br0">&#41;</span> 
+					<span class="kw1">if</span> data: 
+						<span class="kw1">if</span> showflow: <span class="kw1">print</span> <span class="st0">&quot;NET:&quot;</span>, data
+						<span class="kw1">if</span> data<span class="br0">&#91;</span><span class="nu0">0</span>:<span class="nu0">6</span><span class="br0">&#93;</span>.<span class="me1">find</span><span class="br0">&#40;</span><span class="st0">'logout'</span><span class="br0">&#41;</span> == <span class="nu0">0</span>:
+							<span class="kw1">if</span> netclient: netclient.<span class="me1">send</span><span class="br0">&#40;</span><span class="st0">&quot;Disconnected.<span class="es0">\r</span><span class="es0">\n</span>&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+							netclient.<span class="me1">close</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+							netclient = <span class="kw2">None</span>
+							closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>
+							<span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">1.0</span><span class="br0">&#41;</span>		<span class="co1"># pause to allow disconnect</span>
+						<span class="kw1">else</span>: 
+							netq.<span class="me1">put</span><span class="br0">&#40;</span>data<span class="br0">&#41;</span>
+					<span class="kw1">else</span>: <span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">0.1</span><span class="br0">&#41;</span>
+		<span class="kw1">except</span>:
+			<span class="kw1">print</span> <span class="st0">&quot;Exception in net pump&quot;</span>
+			<span class="kw3">traceback</span>.<span class="me1">print_exc</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+			closeSerialPort<span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+&nbsp;
+<span class="kw1">def</span> parseOptions<span class="br0">&#40;</span><span class="br0">&#41;</span>:
+	<span class="co1"># parse command line options</span>
+	<span class="kw1">from</span> <span class="kw3">optparse</span> <span class="kw1">import</span> OptionParser
+	usage = <span class="st0">&quot;usage: %prog [options]&quot;</span>
+	<span class="kw3">parser</span> = OptionParser<span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw3">parser</span>.<span class="me1">add_option</span><span class="br0">&#40;</span><span class="st0">&quot;-p&quot;</span>, <span class="st0">&quot;--port&quot;</span>,
+						dest=<span class="st0">&quot;port&quot;</span>, <span class="kw2">type</span>=<span class="st0">'int'</span>,
+						<span class="kw2">help</span>=<span class="st0">&quot;network connection port [8080]&quot;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw3">parser</span>.<span class="me1">add_option</span><span class="br0">&#40;</span><span class="st0">&quot;-u&quot;</span>, <span class="st0">&quot;--usbdevice&quot;</span>,
+						dest=<span class="st0">&quot;usbdevice&quot;</span>,
+						<span class="kw2">help</span>=<span class="st0">&quot;name of USB serial port device for serial connection [/dev/tty.usbserial*]&quot;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw3">parser</span>.<span class="me1">add_option</span><span class="br0">&#40;</span><span class="st0">&quot;-b&quot;</span>, <span class="st0">&quot;--baud&quot;</span>,
+						dest=<span class="st0">&quot;baud&quot;</span>, <span class="kw2">type</span>=<span class="st0">'int'</span>,
+						<span class="kw2">help</span>=<span class="st0">&quot;baud rate for port specified by -u [57600]&quot;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw3">parser</span>.<span class="me1">add_option</span><span class="br0">&#40;</span><span class="st0">&quot;-k&quot;</span>, <span class="st0">&quot;--keyboard-passthru&quot;</span>, action=<span class="st0">&quot;store_true&quot;</span>, dest=<span class="st0">&quot;kbdpassthru&quot;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw3">parser</span>.<span class="me1">add_option</span><span class="br0">&#40;</span><span class="st0">&quot;-d&quot;</span>, <span class="st0">&quot;--debug&quot;</span>, action=<span class="st0">&quot;store_true&quot;</span>, dest=<span class="st0">&quot;debug&quot;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="br0">&#40;</span>options, args<span class="br0">&#41;</span> = <span class="kw3">parser</span>.<span class="me1">parse_args</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw1">if</span> options.<span class="me1">port</span>:
+		<span class="kw1">global</span> port
+		port = options.<span class="me1">port</span>
+		<span class="kw1">print</span> <span class="st0">&quot;Listening for connections on port:&quot;</span>, port
+&nbsp;
+	<span class="kw1">if</span> options.<span class="me1">baud</span>:
+		<span class="kw1">global</span> baud
+		baud = options.<span class="me1">baud</span>
+		<span class="kw1">print</span> <span class="st0">&quot;Serial port baud rate set to:&quot;</span>, baud
+&nbsp;
+	<span class="kw1">if</span> options.<span class="me1">usbdevice</span>:
+		<span class="kw1">global</span> usbdevice
+		usbdevice = options.<span class="me1">usbdevice</span>
+		<span class="kw1">print</span> <span class="st0">&quot;Using USB serial device: &quot;</span>, usbdevice
+&nbsp;
+	<span class="kw1">if</span> options.<span class="me1">debug</span>:
+		<span class="kw1">global</span> showflow
+		showflow = <span class="kw2">True</span>
+&nbsp;
+	<span class="kw1">if</span> options.<span class="me1">kbdpassthru</span>:
+		<span class="kw1">global</span> kbdpassthru
+		kbdpassthru = <span class="kw2">True</span>
+&nbsp;
+	<span class="co1">#if options.password:</span>
+	<span class="co1">#	import getpass</span>
+	<span class="co1">#	password = getpass.getpass(&quot;Password:&quot;)</span>
+&nbsp;
+&nbsp;
+<span class="kw1">if</span> __name__ == <span class="st0">'__main__'</span>:
+&nbsp;
+	parseOptions<span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw1">import</span> <span class="kw3">thread</span>
+	net_pump_thread = <span class="kw3">thread</span>.<span class="me1">start_new_thread</span><span class="br0">&#40;</span>netPumpTask, <span class="br0">&#40;</span>port, <span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+	serial_pump_thread = <span class="kw3">thread</span>.<span class="me1">start_new_thread</span><span class="br0">&#40;</span>serialPumpTask, <span class="br0">&#40;</span>usbdevice, baud<span class="br0">&#41;</span><span class="br0">&#41;</span>
+	<span class="kw1">if</span> kbdpassthru:
+		kbd_pump_thread = <span class="kw3">thread</span>.<span class="me1">start_new_thread</span><span class="br0">&#40;</span>kbdPumpTask, <span class="br0">&#40;</span><span class="nu0">0</span>,<span class="nu0">0</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+&nbsp;
+	<span class="kw1">while</span> <span class="kw2">True</span>:
+		<span class="kw1">while</span> <span class="kw1">not</span> netq.<span class="me1">empty</span><span class="br0">&#40;</span><span class="br0">&#41;</span>: 
+			handleNetworkInput<span class="br0">&#40;</span>netq.<span class="me1">get</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+			netq.<span class="me1">task_done</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+		<span class="kw1">while</span> <span class="kw1">not</span> serialq.<span class="me1">empty</span><span class="br0">&#40;</span><span class="br0">&#41;</span>:
+			handleSerialInput<span class="br0">&#40;</span>serialq.<span class="me1">get</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span>
+			serialq.<span class="me1">task_done</span><span class="br0">&#40;</span><span class="br0">&#41;</span>
+&nbsp;
+		<span class="kw3">time</span>.<span class="me1">sleep</span><span class="br0">&#40;</span><span class="nu0">0.1</span><span class="br0">&#41;</span></pre>
+</dd></dl>
+
+</div>
+<!-- EDIT5 SECTION "Source Code for bitty.py" [2657-] -->

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- generator="FeedCreator 1.7.2-ppt DokuWiki" -->
+<?xml-stylesheet href="http://bitlash.net/wiki/lib/exe/css.php?s=feed" type="text/css"?>
+<rdf:RDF
+    xmlns="http://purl.org/rss/1.0/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel rdf:about="http://bitlash.net/wiki/feed.php">
+        <title>Bitlash Online</title>
+        <description></description>
+        <link>http://bitlash.net/wiki/</link>
+        <image rdf:resource="http://bitlash.net/wiki/lib/tpl/beaufort/images/favicon.ico" />
+       <dc:date>2011-08-22T08:30:08-07:00</dc:date>
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/printing?rev=1313233810&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/wiki:syntax?rev=1307277682&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/api?rev=1312649069&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/userfunctions?rev=1312649382&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/license?rev=1296913126&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/conditionals?rev=1296915573&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/install?rev=1296944594&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/macros:background?rev=1296944078&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/macros:overview?rev=1263342961&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/backgroundfunctions?rev=1296944135&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/bitlashwebserver?rev=1313470337&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/bitlashfunctions?rev=1312833262&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/functions?rev=1313467642&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/commands?rev=1296916859&amp;do=diff"/>
+                <rdf:li rdf:resource="http://bitlash.net/wiki/language?rev=1296943643&amp;do=diff"/>
+            </rdf:Seq>
+        </items>
+    </channel>
+    <image rdf:about="http://bitlash.net/wiki/lib/tpl/beaufort/images/favicon.ico">
+        <title>Bitlash Online</title>
+        <link>http://bitlash.net/wiki/</link>
+        <url>http://bitlash.net/wiki/lib/tpl/beaufort/images/favicon.ico</url>
+    </image>
+    <item rdf:about="http://bitlash.net/wiki/printing?rev=1313233810&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-08-13T04:10:10-07:00</dc:date>
+        <title>printing</title>
+        <link>http://bitlash.net/wiki/printing?rev=1313233810&amp;do=diff</link>
+        <description>Printing Overview
+
+There are two ways to print in Bitlash: the legacy “print” command, and the printf() function.  The “print” command is handy for printing basic values without much formatting control; it was part of Bitlash 1.0 and is partly retained mainly for backwards compatibility.  The ”:x” format specifier language will be deprecated in Bitlash 2.1, leaving only the printing of basic values.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/wiki:syntax?rev=1307277682&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-06-05T05:41:22-07:00</dc:date>
+        <title>wiki:syntax</title>
+        <link>http://bitlash.net/wiki/wiki:syntax?rev=1307277682&amp;do=diff</link>
+        <description>DokuWiki supports some simple markup language, which tries to make the datafiles to be as readable as possible. This page contains all possible syntax you may use when editing the pages. Simply have a look at the source of this page by pressing the Edit this page button at the top or bottom of the page. If you want to try something, just use the playground page. The simpler markup is easily accessible via quickbuttons, too.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/api?rev=1312649069&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-08-06T09:44:29-07:00</dc:date>
+        <title>api</title>
+        <link>http://bitlash.net/wiki/api?rev=1312649069&amp;do=diff</link>
+        <description>Bitlash API
+
+Your Arduino C program can interact with Bitlash using the functions documented here.
+Of course, in the tiny and open world of Arduino most everything is visible globally.  So feel free to dive in and call what you need.  The entry points documented here are intended to be reasonably well hardened for third party use.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/userfunctions?rev=1312649382&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-08-06T09:49:42-07:00</dc:date>
+        <title>userfunctions</title>
+        <link>http://bitlash.net/wiki/userfunctions?rev=1312649382&amp;do=diff</link>
+        <description>Bitlash User Functions
+
+While Bitlash functions are a handy and straightforward way to extend Bitlash, there are cases where you need native C code to get closer to the hardware, perhaps for speed or to interface with a custom peripheral.
+
+Starting with version 1.1, Bitlash provides an easy way to call C functions from Bitlash code, just like the Bitlash built-in functions.  In effect, you add your functions to the Bitlash function library, and they become callable from the Bitlash command line.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/license?rev=1296913126&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T05:38:46-07:00</dc:date>
+        <title>license</title>
+        <link>http://bitlash.net/wiki/license?rev=1296913126&amp;do=diff</link>
+        <description>Bitlash is licensed under the LGPL Version 2.1 license, which is reproduced below.  Alternate commercial license terms are available. Contact the author.
+
+The content of this web site, Bitlash Online, is subject to a separate Creative Commons license you will find displayed on the footer of each page.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/conditionals?rev=1296915573&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T06:19:33-07:00</dc:date>
+        <title>conditionals</title>
+        <link>http://bitlash.net/wiki/conditionals?rev=1296915573&amp;do=diff</link>
+        <description>The earlier Bitlash 1.0 language had the limitation that the entire tail of the line was treated as a statement group for while and if.  And there was no else.  This made many constructs clumsy and awkward to express.
+
+In Bitlash 2.0 the while and if commands have been remodeled to act much more like C.  The while command iterates either a simple statement or a list of simple statements in curly braces.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/install?rev=1296944594&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T14:23:14-07:00</dc:date>
+        <title>install</title>
+        <link>http://bitlash.net/wiki/install?rev=1296944594&amp;do=diff</link>
+        <description>The Bitlash Install Page
+
+Requirements
+
+You need an Arduino connected to a PC with a working Arduino IDE.  These directions are for Arduino IDE version 0022, but they work for earlier versions back to 0017.
+
+Since Bitlash is an Arduino library you upload with a sketch, you need to be comfortable uploading sketches.  Get this working first to save debugging headaches.  There is plenty of help over at the Arduino Forums.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/macros:background?rev=1296944078&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T14:14:38-07:00</dc:date>
+        <title>macros:background</title>
+        <link>http://bitlash.net/wiki/macros:background?rev=1296944078&amp;do=diff</link>
+        <description>Background Macros
+
+Bitlash can run up to 8 macros in the background while you work in the foreground at the command prompt.
+
+----------
+
+The Run Command
+
+The run command runs a macro in the background:
+
+
+&gt; run toggle13	// LED on D13 starts flashing
+&gt;			// and you get the foreground prompt back</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/macros:overview?rev=1263342961&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2010-01-12T16:36:01-07:00</dc:date>
+        <title>macros:overview</title>
+        <link>http://bitlash.net/wiki/macros:overview?rev=1263342961&amp;do=diff</link>
+        <description>Bitlash Macros
+
+Bitlash allows you to store and manage macros in the Arduino's EEPROM.  By defining new words, you extend Bitlash to suit your application.
+
+Think of a macro as a stored command line.  In Bitlash, that can be multiple statements.  And a statement within a macro can call a macro, so macro execution can nest like subroutine calls (up to a dozen levels deep or so).
+But the simplest use is simply to give a name to a sequence of commands.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/backgroundfunctions?rev=1296944135&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T14:15:35-07:00</dc:date>
+        <title>backgroundfunctions</title>
+        <link>http://bitlash.net/wiki/backgroundfunctions?rev=1296944135&amp;do=diff</link>
+        <description>Background Functions
+
+Bitlash can run up to 8 functions in the background while you work in the foreground at the command prompt.
+
+----------
+
+The Run Command
+
+The run command runs a function in the background:
+
+
+&gt; run toggle13	// LED on D13 starts flashing
+&gt;	// and you get the foreground prompt back</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/bitlashwebserver?rev=1313470337&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-08-15T21:52:17-07:00</dc:date>
+        <title>bitlashwebserver</title>
+        <link>http://bitlash.net/wiki/bitlashwebserver?rev=1313470337&amp;do=diff</link>
+        <description>This is a Bitlash-powered Ethernet web server and telnet console for Arduino.
+
+It works with the official Arduino Ethernet shield and compatible Arduino boards.
+
+Getting Started
+
+	*  Adjust the IP address, port, and default gateway in the code to be suitable for your network.
+	*  Upload the BitlashWebServer sketch to your Arduino
+			*  File -&gt; Examples -&gt; Bitlash -&gt; BitlashWebServer
+			* File -&gt; Upload</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/bitlashfunctions?rev=1312833262&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-08-08T12:54:22-07:00</dc:date>
+        <title>bitlashfunctions</title>
+        <link>http://bitlash.net/wiki/bitlashfunctions?rev=1312833262&amp;do=diff</link>
+        <description>Bitlash Functions
+
+Bitlash allows you to store and manage Bitlash Functions in the Arduino's EEPROM.  By defining new functions, you extend Bitlash to suit your application.
+
+Think of a function as a stored command line.  In Bitlash, that can be multiple statements.  And a statement within a function can call a function, so function execution can nest like subroutine calls (up to a dozen levels deep or so).
+But the simplest use is simply to give a name to a sequence of commands.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/functions?rev=1313467642&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-08-15T21:07:22-07:00</dc:date>
+        <title>functions</title>
+        <link>http://bitlash.net/wiki/functions?rev=1313467642&amp;do=diff</link>
+        <description>Bitlash Built-In Function Reference
+
+This is an alphabetical reference listing all the built-in functions provided in Bitlash.
+
+Many Bitlash functions are straight pass-throughs from the Arduino functions of the same name.  Therefore, the definitive reference for the behavior of the functions is the Arduino Extended Reference Page.</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/commands?rev=1296916859&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T06:40:59-07:00</dc:date>
+        <title>commands</title>
+        <link>http://bitlash.net/wiki/commands?rev=1296916859&amp;do=diff</link>
+        <description>Bitlash Command Reference
+
+Here is an alphabetical reference list of Bitlash commands.
+
+----------
+
+expression evaluation
+
+If you type a “naked expression” it will be evaluated, and any side effects like function calls and function executions will happen, but nothing is printed unless you say so using print.  For example:</description>
+    </item>
+    <item rdf:about="http://bitlash.net/wiki/language?rev=1296943643&amp;do=diff">
+        <dc:format>text/html</dc:format>
+        <dc:date>2011-02-05T14:07:23-07:00</dc:date>
+        <title>language</title>
+        <link>http://bitlash.net/wiki/language?rev=1296943643&amp;do=diff</link>
+        <description>The Bitlash Language
+
+----------
+
+How It Works: The Bitlash Execution Model
+
+It helps to start by thinking of Bitlash as a dumb command line calculator.  You type a line of commands and press Enter; Bitlash interprets the line and returns you to the prompt.</description>
+    </item>
+</rdf:RDF>

@@ -1,0 +1,260 @@
+===== Bitlash Built-In Function Reference =====
+
+This is an alphabetical reference listing all the built-in functions provided in Bitlash.
+
+Many Bitlash functions are straight pass-throughs from the Arduino functions of the same name.  Therefore, the definitive reference for the behavior of the functions is [[arduino>Extended|the Arduino Extended Reference Page]].
+
+Functions may be used in expressions in the normal way: abs(ar(3)-256) and so forth.  
+
+Bear in mind that functions return 32-bit integer values (**signed long** or **int32_t** in C).  Whether the value is interpreted as signed or unsigned depends on the function.
+
+It is an error to call a function with the wrong number of arguments.
+
+For functions of zero arguments you may omit the empty parens ():
+<code>
+> print free,free(),millis,millis()
+335 335 24455 24456
+</code>
+
+See also [[commands|Bitlash commands]] and the [[language|Bitlash language]].
+----
+
+==== abs(x): absolute value ====
+
+Return x < 0 ? -x : x.  See [[arduino>abs]].
+
+----
+==== ar(apin): analogRead(apin) ====
+
+Return a 10-bit analog-to-digital conversion value from the specified **analog input pin**.  See [[arduino>analogRead]].
+
+----
+==== aw(dpin,value): analogWrite(dpin,value) ====
+
+Write a PWM value to a ** digital pwm output pin**.  The pin must be prepared for output beforehand via pinmode(pin,1). 
+
+A simpler syntax if the pin is fixed is: a6=128
+
+See [[arduino>analogWrite]].
+
+----
+==== baud(pin,baud): set baud rate for printed output ====
+
+By default, Arduino prints at 57600 on pin 0 and 9600 on any other pin.  If you wish to set a different rate use the baud function:
+<code>
+> baud(5, 4800);	// prepare "print #5:" to produce serial output on pin 5 at 4800 baud (8,n,1) 
+> baud(0, 9600);	// set the default/hardware serial port to 9600 baud
+</code>
+
+See [[printing]].
+
+----
+==== bc(val, bitnum): bitclear ====
+
+Returns val with the bit indicated by bitnum [0..31] set to 0.
+
+See [[arduino>bitclear]].
+
+----
+==== beep(pin, frequencyhz, durationms) ====
+
+Toggle the specified pin at the specified frequency for the specified duration.  Automatically sets pinMode to OUTPUT.  
+
+Beep is blocking: background execution is paused.  Use caution for long durations: there is no way to break out of a long beep (the longest value is several days).
+<code>
+> beep(11,440,200)	// make the beeper on pin 11 beep at 440Hz for 200ms
+</code>
+
+----
+==== br(val, bitnum): bitread ====
+
+Returns the value of the bitnum'th bit [0..31] in val.
+
+See [[arduino>bitread]].
+
+----
+==== bs(val, bitnum): bitset ====
+
+Returns val with the bitnum'th bit [0..31] set.
+
+See [[arduino>bitset]].
+
+----
+==== bw(val, bitnum, bitval): bitwrite ====
+
+Returns val with the bitnum'th bit [0..31] set to bitval [0|!0].
+
+See [[arduino>bitwrite]].
+
+----
+==== constrain(val,min,max) ====
+
+Returns the closest value to val between min and max.
+
+See [[arduino>constrain]].
+
+----
+==== delay(milliseconds) ====
+
+Pause execution for the specified number of milliseconds.
+
+Delay is blocking; nothing else happens while a delay() is being processed.  For this reason is it better to use background functions to do things that span non-trivial time.
+
+See [[arduino>delay]].
+
+----
+==== dr(dpin): digitalRead(dpin) ====
+
+The dr() function is shorthand for digitalRead().  It returns the current logic level on the specified pin.
+
+If the pin is fixed and known beforehand you can use **pin variable** notation instead:
+<code>
+> z = 13
+> x = dr(z)   // return digitalRead(13)
+
+> x = d13     // same result using pin variable notation
+</code>
+
+See [[arduino>digitalRead]].
+
+----
+==== dw(dpin,bval) ====
+
+digitalWrite: Set the designated pin to the given boolean value.
+
+See [[arduino>digitalWrite]].
+
+----
+==== er(addr): EEPROM.read(addr) ====
+
+Return the value stored in EEPROM at the specified address.
+
+----
+
+==== ew(addr, value): EEPROM.write(addr, value) ====
+
+Write one-byte value to EEPROM at addr.
+
+See [[arduino>EEPROM]].
+
+More on Bitlash and EEPROM at [[bitlashfunctions]].
+
+----
+
+==== free() ====
+
+Returns the amount of memory between the top of the heap and the stack pointer; in other words, the amount of stack space Bitlash and all your other code, including interrupt handlers, have to work with.
+
+Numbers less than 50 or so indicate ram starvation and mean that the odd behavior you are seeing (or will see soon) is attributable to the occasional excursion of the stack into the defined ram area, piddling on the interpreter state.  Nothing good will come of this.
+
+Note that malloc() and free() are not used by or included in Bitlash and the free memory calculation takes no heed of memory broken out of the heap if you should include them for your code.  
+
+The free() function will issue an exception if free memory appears to be less than zero.
+
+----
+==== inb(reg) ====
+
+Return the 8-bit value of the specified AVR processor register.
+
+The processor registers and their functions are the function of the extensive [[http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf|ATmega328P Data Sheet]].  You will find a convenient cross reference chart of the registers starting on page 425.
+
+You specify a register address (from the first column of the table on pp. 425 ff.) to tell the inb() and outb() which register to address.  In the case where the table has two addresses, use the right-hand one. 
+
+For example, to read the Timer0 count register TCNT0, find its entry on page 470 and note its address is 0x46. Then, to read and print it in Bitlash:
+
+<code>
+print inb(0x46)
+</code>
+
+
+----
+
+==== map(val, fromlow, fromhigh, tolow, tohigh) ====
+
+Constrains val to [fromlow..fromhigh] and then maps it linearly to [tolow..tohigh].  Got it?
+
+NOTE: The map() function is deprecated as of Bitlash version 1.1 and is therefore not included in the build.
+
+See [[arduino>map]].
+
+----
+
+==== max(a,b) ====
+
+Returns the greater of a and b.
+
+See [[arduino>max]].
+
+----
+==== millis() ====
+
+Returns the number of milliseconds since startup.
+
+See [[arduino>millis]].
+----
+==== min(a,b) ====
+
+Returns the lesser of a and b.
+
+See [[arduino>min]].
+----
+==== outb(reg,value) ==== 
+
+Set the specified AVR processor register to the given value.
+
+The processor registers and their functions are the function of the extensive [[http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf|ATmega328P Data Sheet]].  You will find a convenient cross reference chart of the registers starting on page 425.
+
+You specify a register address (from the first column of the table on pp. 425 ff.) to tell the inb() and outb() which register to address.  In the case where the table has two addresses, use the right-hand one. 
+
+For example, to set the OCR0A register (0x47) to control timer 0 PWM, you could say:
+
+<code>
+outb(0x47, 128)
+</code>
+----
+
+==== pinmode(pin,outie) ====
+
+Set the pin to an output pin if **outie** is true.
+
+See [[arduino>pinMode]].
+
+----
+==== pulsein(pin, value, timeout) ====
+
+Times an input pulse.  See [[arduino>pulseIn]].
+
+----
+
+
+==== random(max) ====
+
+Returns a random number between 0 and max-1.
+
+See [[arduino>random]].
+----
+
+
+==== shiftout(dataPin, clkPin, bitOrder, value) ====
+
+Bitbang the provided value out the data pin, clocking with the clock pin.
+
+See [[arduino>shiftOut]].
+----
+
+==== sign(value) ====
+
+Return -1 if value is negative, 0 if 0, or 1 if positive.
+----
+
+
+==== snooze(snoozems): defer background task execution for a while ====
+
+Suspend further invocations of this background macro for snoozemillis milliseconds.  See the page on [[backgroundfunctions|Background Functions]] for details on multitasking with snooze.
+
+<code>
+> function blink13 {d13=!d13; snooze(100);}
+> run blink13	// only toggles every 100 ms
+</code>
+
+----

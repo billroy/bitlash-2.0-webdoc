@@ -1,0 +1,6 @@
+1263255315	::1	C	conditionals	wikiops	created	
+1263328914	::1	E	conditionals	wikiops		
+1263329028	::1	E	conditionals	wikiops		
+1296915536	::1	E	conditionals	wikiops		
+1296915573	::1	E	conditionals	wikiops	[Omitting { } for a single statement] 	
+1296915635	::1	e	conditionals	wikiops	[switch (expr) {stmt0; stmt1; ...; stmtN;}] 	

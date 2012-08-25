@@ -1,0 +1,113 @@
+====== Bitlash Conditionals: if, while, and switch ======
+
+The earlier Bitlash 1.0 language had the limitation that the entire tail of the line was treated as a statement group for **while** and **if**.  And there was no **else**.  This made many constructs clumsy and awkward to express.
+
+In Bitlash 2.0 the **while** and **if** commands have been remodeled to act much more like C.  The **while** command iterates either a simple statement or a list of simple statements in curly braces.
+
+Execution of the rest of the function continues after the while condition fails, without the previous regard for "rest of the line".
+
+The **if** construct now has an **else** clause, and execution continues after the appropriate if/else clause.
+
+Finally, the **switch** command now allows any Bitlash statement to be a case handler.
+
+
+==== while (expr) {stmt1; ...; stmtN;} ====
+
+The **while** command repeats execution of the while-statements as long as the test expression is true.  When the test expression is false, execution continues  after the while's statement list.
+<code>
+> while (millis() < 100000) {d13=!d13;} print "Done";
+(light flickers)
+Done
+>
+</code>
+
+Execution of the **while** loop is blocking.  In other words, during the execution of a **while** command, no other functions can run, since Bitlash is working as hard as it can to get to the end of that command line.  The combination of **while 1** with **delay()** is particularly deadly, since it uses the whole processor:
+<code>
+> print "this works but NOTE it will hog the whole arduino"
+> while 1 {print millis(); delay(1000);}
+(no prompt again until you press ^C)
+</code>
+
+Bitlash polls the serial port for Control-C during while loops, so you can break out.
+
+----
+==== if (expr) {stmt1; ...; stmtN;} [else {stmt1; ...; stmtN;}] ====
+
+The **if** command executes the first statement list if the test condition is true; otherwise, the optional else part is executed, if present.
+
+Unlike Bitlash 1.0, execution continues on the rest of the program text after the if/else statement.
+
+<code>
+> if (d4) {print "the light is on";}
+</code>
+
+==== Omitting { } for a single statement ====
+
+When using **while** and **if**, it is legal syntax to omit the {} if only a single statement is to be executed, just like in C.  (In other words a statement is recursively defined as a statement or a list of statements in curly braces.)
+
+<code>
+> i=0; while (++i<3) print i; print "done";
+1
+2
+done
+>
+</code>
+
+----
+==== switch (expr) {stmt0; stmt1; ...; stmtN;} ====
+
+The switch command selects one of N statements to execute based on the value of a numeric expression.  This provides a very easy way to build state machines, among other things.
+
+Syntax:
+<code>
+switch (selection-expression) { stmt0; stmt1; ...; stmtN;}
+</code>
+
+The selection-expression is evaluated to produce an integer result, which is used to select one of the supplied statements in curly braces.  The selected statement, **and only the selected statement** from among those in curly braces, is executed, then execution continues after the switch statement.
+
+(Note: This construct is similar to but not strictly compatible with the C switch statement, which has "case x:" tags to specify each case.)
+
+If the value of the selection expression is less than zero it is treated as zero and therefore the first supplied statement is executed.  If the value is greater than N, the last statement is executed.
+
+Example: This switch statement in the elevator2.btl example calls **wating**, **goingup**, or **goingdown**, depending on the value of s, the variable that represents the state of the elevator system:
+<code>
+switch s {waiting; goingup; goingdown;}
+</code>
+
+If the value of s is <= 0, the **waiting** function will be called.
+
+If the value of s is == 1, the **goingup** function will be called.
+
+If the value of s is >= 2, the **goingdown** function will be called.
+
+Example: Unlike Bitlash 1.0, the case handlers can be any Bitlash statement, for example:
+
+<code>
+switch (d) {print "foo"; print "bar"; print "baz"; boot;}
+</code>
+
+----
+
+==== Nesting ====
+
+Nested conditionals work as you would expect:
+<code>
+> a=0;while (a++<2) {b=0; while (b++<2) {print a,b;}}
+1 1
+1 2
+2 1
+2 2
+>  
+</code>
+
+----
+==== How to simulate a "for" loop ====
+
+The simplest way is to unroll it as a **while**.  Here is an example that initializes pins 3 through 8 as outputs and sets them to HIGH:
+<code>
+> i=3; while i<=8 {pinmode(i,1); dw(i,1); i++;}
+</code>
+For extra credit, let's initialize the even ones on and the odd ones off: 
+<code>
+> i=3; while i<=8 {pinmode(i,1); dw(i,(i&1)); i++;}
+</code>

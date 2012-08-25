@@ -1,0 +1,137 @@
+
+<h2 class="sectionedit1"><a name="bitlash_online" id="bitlash_online">Bitlash Online</a></h2>
+<div class="level2">
+
+<p>
+Welcome to Bitlash Online.
+</p>
+
+<p>
+Bitlash is an open source interpreted language shell and embedded programming environment.  This website documents Bitlash for the popular and useful <a href="http://arduino.cc" class="urlextern" title="http://arduino.cc"  rel="nofollow">Arduino</a>.
+</p>
+
+<p>
+The Bitlash shell runs entirely on the Arduino and supports many of the familiar Arduino functions.  Bitlash interprets commands you type on the serial port:
+
+</p>
+<pre class="code">bitlash here! v1.1 (c) 2010 Bill Roy -type HELP- 1383 bytes free
+&gt; print &quot;Hello, world!&quot;, millis()
+Hello, world! 11939
+&gt; </pre>
+
+<p>
+
+It&#039;s easy to extend Bitlash by naming a sequence of commands as a <a href="/wiki/macros:overview" class="wikilink1" title="macros:overview">Macro</a>, which is like a new word in the Bitlash language.  A Bitlash application is a set of such macros, and since they are stored in the EEPROM, Bitlash can start up your application automatically at boot time for standalone operation.
+</p>
+
+<p>
+In cases where you need native C code to get closer to the hardware, perhaps for speed or to interface with a custom peripheral,
+it&#039;s also easy to integrate your C code with Bitlash as a <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">User Function</a>.
+</p>
+
+<p>
+Read on for more about Bitlash.
+</p>
+
+</div>
+<!-- EDIT1 SECTION "Bitlash Online" [1-1111] -->
+<h3 class="sectionedit2"><a name="quick_start" id="quick_start">Quick Start</a></h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> <a href="/wiki/download" class="wikilink1" title="download">Download</a> the latest release of Bitlash for the Arduino</div>
+</li>
+<li class="level1"><div class="li"> <a href="/wiki/install" class="wikilink1" title="install">Install</a> Bitlash and upload it to your Arduino</div>
+</li>
+<li class="level1"><div class="li"> Proceed to the <a href="/wiki/docindex" class="wikilink1" title="docindex">Documentation Index</a></div>
+</li>
+<li class="level1"><div class="li"> Read more <a href="/wiki/about" class="wikilink1" title="about">About Bitlash</a> and the <a href="/wiki/author" class="wikilink1" title="author">Author</a></div>
+</li>
+</ul>
+
+<p>
+—-
+</p>
+
+</div>
+<!-- EDIT2 SECTION "Quick Start" [1112-1365] -->
+<h3 class="sectionedit3"><a name="what_is_bitlash" id="what_is_bitlash">What is Bitlash?</a></h3>
+<div class="level3">
+
+<p>
+
+Bitlash is an embedded interpreter that runs in about 14k of memory on an Atmel AVR processor.  It works nicely with Arduino to make a development and prototyping tool for those situations where you need to bang some bits on the Arduino but writing a sketch in C is premature.  It&#039;s very convenient for bringing up and debugging new hardware.
+</p>
+
+<p>
+The Bitlash command language is very similar to Arduino C and includes a large repertiore of the familiar Arduino C functions so you can hack your hardware from the serial command line or even over the internet via telnet.
+</p>
+
+<p>
+You can store commands as <a href="/wiki/macros:overview" class="wikilink1" title="macros:overview">macros</a> in EEPROM and autostart them at bootup, making the automation and maintenance of small applications very easy.  Here is the classic Blink13 program as a complete Bitlash application in two macros, <strong>toggle13</strong> to toggle the led and <strong>startup</strong> to initialize and run it:
+
+</p>
+<pre class="code">&gt; toggle13:=&quot;d13=!d13&quot;
+&gt; startup:=&quot;pinmode(13,1);run toggle13,1000&quot;
+&gt; boot
+(d13 flashes)</pre>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "What is Bitlash?" [1366-2394] -->
+<h3 class="sectionedit4"><a name="release_announcements" id="release_announcements">Release Announcements</a></h3>
+<div class="level3">
+
+</div>
+
+<h4><a name="bitlash_11_release_announcement" id="bitlash_11_release_announcement">Bitlash 1.1 Release Announcement</a></h4>
+<div class="level4">
+
+<p>
+
+Bitlash 1.1 is available at the <a href="/wiki/download" class="wikilink1" title="download">download</a> page.  Here is a summary of the changes:
+
+</p>
+<ul>
+<li class="level1"><div class="li"> <strong>User Functions:</strong> This release is mainly about the new <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">userfunctions</a> feature, which makes it Really Easy to add your C function to Bitlash.  You&#039;ll find some new examples of this feature in the Arduino IDE at the File → Examples → bitlash menu item, and documentation at the <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">userfunctions</a> page.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> <strong>New Functions inb() and outb(): </strong> Read and write the AVR registers from your Bitlash scripts.  Details on the <a href="/wiki/functions" class="wikilink1" title="functions">functions</a> page.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> <strong>Deprecated Functions:</strong> These functions didn&#039;t make the cut at spring cleaning time and are no longer supported in the Bitlash core: du(), map(), shiftout(), sa(), sr() and usr().</div>
+</li>
+</ul>
+
+</div>
+
+<h4><a name="bitlash_10_available_now" id="bitlash_10_available_now">Bitlash 1.0 Available Now</a></h4>
+<div class="level4">
+
+<p>
+
+After over a year in development Bitlash 1.0 is available for <a href="/wiki/download" class="wikilink1" title="download">download</a>. 
+</p>
+
+<p>
+There is one bug fix since the RC2 version, renaming the folders and files in the /examples tree to remove the &#039;-&#039; which became deprecated in Arduino 0017.
+</p>
+
+<p>
+Bitlash 1.0 is tested on <a href="http://arduino.cc/en/Main/Software" class="urlextern" title="http://arduino.cc/en/Main/Software"  rel="nofollow">Arduino 0017</a> and <a href="http://code.google.com/p/arduino/downloads/list" class="urlextern" title="http://code.google.com/p/arduino/downloads/list"  rel="nofollow">Arduino 0018 RC1</a>.  The <a href="/wiki/install" class="wikilink1" title="install">install</a> instructions are updated for 0017.  
+</p>
+
+</div>
+
+<h5><a name="documentation_overhaul" id="documentation_overhaul">Documentation Overhaul</a></h5>
+<div class="level5">
+
+<p>
+
+The Bitlash documentation is now hosted in this wiki.  Please send comments to the <a href="/wiki/author" class="wikilink1" title="author">Author</a>
+</p>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Release Announcements" [2395-] -->

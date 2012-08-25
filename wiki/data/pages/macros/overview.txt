@@ -1,0 +1,151 @@
+===== Bitlash Macros =====
+
+Bitlash allows you to store and manage **macros** in the Arduino's EEPROM.  By defining new words, you extend Bitlash to suit your application.
+
+Think of a macro as a stored command line.  In Bitlash, that can be multiple statements.  And a statement within a macro can call a macro, so macro execution can nest like subroutine calls (up to a dozen levels deep or so).
+But the simplest use is simply to give a name to a sequence of commands.
+
+
+----
+
+==== Rules For Macro Names ====
+
+Macro names must begin with an alpha character ['a'..'z'] and be 12 characters or less in length. (Yes, "filename.txt" is a legal macro name.)  Macro names must be more than one character long (to avoid conflict with the built-in numeric variables named a through z) and must not conflict with any of the pin variables (d0..22 and a0..7), nor with the built-in functions and commands.  Macro names can contain digits and the underscore '_' and period '.' characters.
+
+----
+==== Defining a Macro ====
+
+To define a macro, use the **name := "value"** syntax:
+<code>
+> toggle13:="d13=!d13;delay(100)"	// defines toggle13: flip the bit and wait a while
+> startup:="while 1:toggle13"	// defines startup.  this name is special.  see below.
+> hello:="print(\"hello, world\")"	// note: to include a " type it as \" per this example
+</code>
+
+----
+==== Run a macro: foreground ====
+
+To invoke a macro, you can type its name at the command line or refer to it in another macro (for example in the definition of startup above):
+<code>
+> toggle13			// flips bit 13
+</code>
+----
+
+==== Run a macro: background ====
+
+To run a macro in the background use the **run** command:
+<code>
+> run toggle13
+> ps			// is anything running?
+0: toggle13		// yes, there's our macro running
+> stop 0		// stop it
+>				// now it's stopped
+</code>
+There is more detail on this topic in the [[macros:background|Background Macros]] section.
+
+----
+==== List macros in EEPROM ====
+
+To list all the macros stored in the EEPROM use the **ls** command:
+<code>
+> ls					// list all the macros
+toggle13:="d13=!d13"
+startup:="while 1:toggle13"
+hello:="print(\"hello, world\")"
+</code>
+
+Note that **ls** inserts '\' before escape characters.
+
+----
+==== Remove a macro from EEPROM ====
+
+To remove a macro use the **rm** command:
+<code>
+> rm hello				// rm removes a macro.  rm * does what you think.
+> ls
+toggle13:="d13=!d13"
+startup:="while 1:toggle13"
+</code>
+
+----
+==== The Startup Macro ====
+
+If there is a macro by the name "startup", it is run automatically at boot time.
+Make one like this:
+<code>
+> startup:="print(1,2,3)"
+> boot
+bitlash v0.99z here!...
+1 2 3
+>
+</code>
+Don't like it?
+<code>
+> startup:="...new definition..."		// redefine the startup macro
+> rm startup					// delete the startup macro
+</code>
+
+Tip: If it looks like it's sitting there doing nothing, it's probably running a macro.  Press ^C to break out of a looping startup command.
+
+----
+==== The Prompt Macro ====
+
+If there is a macro by the name "prompt", it is run automatically whenever the command line prompt is to be printed so that you can customize the prompt.
+Here is an example of a prompt macro that prints the current time in millis:
+<code>
+> prompt:="print millis,;print\"$\","
+36244$ 		// press enter at this prompt
+36484$ 		// time advances
+</code>
+
+----
+==== Inspecting and Formatting Macro Storage in the EEPROM ====
+
+There may be debris in your EEPROM from another project.  Or your Bitlash program can blow chunks, or Bitlash can blow chunks.  Anyway, the EEPROM can become "less than fresh".  This might first show up as funky results from the ls command, for example.
+
+You can inspect your EEPROM with the peep command, which prints a map of EEPROM:
+<code>
+> peep
+E000:  t13\ d13=  !d13 ;del  ay(1 00)\  star tup\  prin t("R  unni ng b  link -13   demo  - p
+E040:  ress  ^C"  ); w hile   1:t 13\.  .... ....  .... ....  .... ....  .... ....  .... ....
+E080:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E0C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E100:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E140:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E180:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E1C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+</code>
+
+This is a healthy map.  The places marked '.' are empty (==255).  The name-value storage for t13 and startup can be seen.  As you add macros you will see them fill from low addresses up, always in pairs.
+
+An unhealthy map might have garbage in the supposedly unused part.  Or there could be free space available but spread around in fragmented blocks (see Fragmentation below).
+
+You can erase and "reformat" the EEPROM using the "rm *" command; see below.  
+This will erase any macros you have typed into bitlash, as well as the garbage.  
+In other words:
+
+**Note: RM *" WILL NUKE THE WHOLE EEPROM.  There is no way to recover it.  Please use caution. **
+
+----
+==== A note on EEPROM usage: Don't bang on the EEPROM ====
+
+The EEPROM is said to be certified for about 1e5 cycles.  Bitlash could drive that many write cycles in under ten minutes, if you told it to.  If you do this and your EEPROM breaks you get to keep the pieces.  But please write and let us know how it failed.  We've never seen it happen.
+Anyway, use EEPROM for long term storage like macro definitions, not loop counters, and factor EEPROM life into your application life cycle model.
+
+----
+==== EEPROM Free Space Fragmentation ====
+
+Heavy use of the macro store may lead to fragmented free space.  You would see this in the peep map as free space dot clusters too small to be of use scattered here and there.
+
+This version of Bitlash does not have a method to compact the free space, but if you are highly motivated to squeeze out the last possible byte, here is a straightforward but unfortunately manual workaround:
+
+  * Use 'ls' to get the contents of all the macros.  Copy to safe place!
+  * Use 'rm *' to nuke the eeprom.  All your macros are gone!  Hope you copied them!
+  * Paste the output you saved into your bitlash terminal emulator to re-define the macros.
+
+Depending on many factors, (baud rate, clock speed, terminal program, OS, ...) it may be necessary to paste the definitions one at a time.
+
+----
+==== Reserving EEPROM for Other Applications ====
+
+This can be done by adjusting the values of STARTDB and ENDDB in bitlash.cpp.  You are advised to save, reformat, and reload any EEPROM contents after changing these values.

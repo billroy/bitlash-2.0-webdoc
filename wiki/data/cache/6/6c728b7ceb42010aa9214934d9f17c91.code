@@ -1,0 +1,134 @@
+	<span class="kw3">time</span>.<span class="me1">cpp</span> <span class="sy2">--</span> Bitlash API Integration <span class="sy4">::</span> <span class="me2">Wall</span> Clock Example
+&nbsp;
+	Copyright <span class="nu0">2008</span> by Bill Roy.
+&nbsp;
+	<span class="me1">This</span> is a sample Bitlash API integration.  
+&nbsp;
+	<span class="me1">It</span> implements <span class="kw3">clock</span> based on the Arduino millis<span class="br0">&#40;</span><span class="br0">&#41;</span> timer.
+&nbsp;
+	<span class="me1">INSTALL</span>
+&nbsp;
+	Paste bitlash.<span class="me1">cpp</span> and <span class="kw3">this</span> file <span class="kw3">time</span>.<span class="me1">cpp</span> into an Arduino sketch window.
+	<span class="me1">Modify</span> loop<span class="br0">&#40;</span><span class="br0">&#41;</span> to look like <span class="kw3">this</span><span class="sy4">:</span>
+&nbsp;
+		<span class="kw4">void</span> loop<span class="br0">&#40;</span><span class="kw4">void</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+			runClock<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy4">;</span>			<span class="co1">// &lt;-- add this line</span>
+			runBitlash<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+		<span class="br0">&#125;</span>
+&nbsp;
+	Upload and play.
+&nbsp;
+&nbsp;
+	<span class="me1">CLOCK</span> REGISTERS
+&nbsp;
+	The <span class="kw3">time</span> of the <span class="kw3">clock</span> is automagically maintained in Bitlash variables<span class="sy4">:</span>
+		h<span class="sy4">:</span>	the hour
+		m<span class="sy4">:</span>	the minute
+		s<span class="sy4">:</span>	the second
+		d<span class="sy4">:</span>	the day
+		e<span class="sy4">:</span>	the epoch <span class="br0">&#40;</span>the value of millis<span class="br0">&#40;</span><span class="br0">&#41;</span> when d<span class="sy4">:</span>h<span class="sy4">:</span>m<span class="sy4">:</span>s was the <span class="kw3">time</span><span class="br0">&#41;</span>
+&nbsp;
+	Think of these as your <span class="kw3">time</span> registers.
+&nbsp;
+	<span class="me1">To</span> set the <span class="kw3">time</span>, set the variables at the Bitlash prompt<span class="sy4">:</span>
+&nbsp;
+		<span class="sy1">&gt;</span> h<span class="sy1">=</span><span class="nu0">12</span><span class="sy4">;</span>m<span class="sy1">=</span><span class="nu0">30</span><span class="sy4">;</span>s<span class="sy1">=</span><span class="nu0">12</span>
+&nbsp;
+	A note on <span class="st0">'d'</span><span class="sy4">:</span> the days variable simply counts the number of days since
+	startup.  <span class="me1">Implementing</span> better day rollover including end<span class="sy2">-</span>of<span class="sy2">-</span>month
+	handling with correction <span class="kw1">for</span> leap years is left as an exercise <span class="kw1">for</span> the
+	reader.  <span class="me1">Same</span> with leap seconds.  <span class="me1">And</span> <span class="kw3">time</span> zones.  <span class="me1">And</span> daylight savings
+	<span class="kw3">time</span>.
+&nbsp;
+	<span class="me1">CLOCK</span> UPDATE
+&nbsp;
+	The automagic <span class="kw3">time</span> update happens in the runClock<span class="br0">&#40;</span><span class="br0">&#41;</span> function, which
+	the sketch calls runClock<span class="br0">&#40;</span><span class="br0">&#41;</span> in loop<span class="br0">&#40;</span><span class="br0">&#41;</span>, along with runBitlash<span class="br0">&#40;</span><span class="br0">&#41;</span>.  
+&nbsp;
+	<span class="me1">The</span> runClock<span class="br0">&#40;</span><span class="br0">&#41;</span> function updates the Bitlash <span class="kw3">clock</span> variables so that 
+	your Bitlash script can use them at any <span class="kw3">time</span><span class="sy4">:</span>
+&nbsp;
+		<span class="sy1">&gt;</span> print <span class="st0">&quot;Time: &quot;</span>, h,<span class="st0">&quot;:&quot;</span>,m,<span class="st0">&quot;:&quot;</span>,s
+&nbsp;
+&nbsp;
+	CLOCK MACROS<span class="sy4">:</span> 
+&nbsp;
+	The script also demonstrates running commands through the API by automatically
+	looking <span class="kw1">for</span> and running these Bitlash macros, <span class="kw1">if</span> they are present, on the specified
+	<span class="kw3">time</span> events<span class="sy4">:</span>
+&nbsp;
+		onsecond	runs each second
+		onminute	runs each minute at seconds rollover
+		onhour		runs each hour at minutes rollover
+		onday		runs each day at hour rollover
+&nbsp;
+	For example, <span class="kw3">this</span> will chime the hour on a piezo buzzer at pin <span class="nu0">11</span><span class="sy4">:</span>
+&nbsp;
+		<span class="sy1">&gt;</span> checknoon <span class="sy4">:</span><span class="sy1">=</span> <span class="st0">&quot;if i==0: i=12&quot;</span>
+		<span class="sy1">&gt;</span> onhour <span class="sy4">:</span><span class="sy1">=</span> <span class="st0">&quot;i=h; checknoon; while i--: beep 11,440,200; delay(1000)&quot;</span>
+&nbsp;
+	Additional event types like onalarm and onleapsecond are left to the reader. <span class="sy4">;</span><span class="br0">&#41;</span>
+&nbsp;
+	LICENSE
+&nbsp;
+	Bitlash lives at<span class="sy4">:</span> http<span class="sy4">:</span><span class="co1">//bitlash.net</span>
+	The author can be reached at<span class="sy4">:</span> bill@bitlash.<span class="me1">net</span>
+&nbsp;
+	Copyright <span class="br0">&#40;</span>C<span class="br0">&#41;</span> <span class="nu0">2008</span> Bill Roy
+&nbsp;
+    This library is <span class="kw3">free</span> software<span class="sy4">;</span> you can redistribute it and<span class="sy2">/</span>or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation<span class="sy4">;</span> either
+    version <span class="nu16">2.1</span> of the License, or <span class="br0">&#40;</span>at your option<span class="br0">&#41;</span> any later version.
+&nbsp;
+    <span class="me1">This</span> library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY<span class="sy4">;</span> without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  <span class="me1">See</span> the GNU
+    Lesser General Public License <span class="kw1">for</span> more details.
+&nbsp;
+    <span class="me1">You</span> should have received a copy of the GNU Lesser General Public
+    License along with <span class="kw3">this</span> library<span class="sy4">;</span> <span class="kw1">if</span> not, write to the Free Software
+    Foundation, Inc., <span class="nu0">51</span> Franklin Street, Fifth Floor, Boston, MA  <span class="nu8">02110</span><span class="sy2">-</span><span class="nu0">1301</span>  USA
+&nbsp;
+<span class="sy2">*****/</span>
+&nbsp;
+<span class="co1">// variable indexes for epoch, hour, minute, second, and day</span>
+<span class="co2">#define v_epoch ('e'-'a')</span>
+<span class="co2">#define v_hour ('h'-'a')</span>
+<span class="co2">#define v_minute ('m'-'a')</span>
+<span class="co2">#define v_second ('s'-'a')</span>
+<span class="co2">#define v_day ('d'-'a')</span>
+&nbsp;
+&nbsp;
+<span class="co1">//	runClock -- update the clock variables</span>
+<span class="co1">//</span>
+<span class="co1">//	call this frequently in loop()</span>
+<span class="co1">//</span>
+<span class="kw4">void</span> runClock<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+<span class="kw4">unsigned</span> <span class="kw4">long</span> now <span class="sy1">=</span> millis<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+<span class="kw4">unsigned</span> <span class="kw4">long</span> dt <span class="sy1">=</span> now <span class="sy2">-</span> getVar<span class="br0">&#40;</span>v_epoch<span class="br0">&#41;</span><span class="sy4">;</span>
+&nbsp;
+	<span class="kw1">if</span> <span class="br0">&#40;</span>dt <span class="sy1">&lt;</span> <span class="nu0">1000</span><span class="br0">&#41;</span> <span class="kw1">return</span><span class="sy4">;</span>		<span class="co1">// nothing to see</span>
+&nbsp;
+	<span class="kw1">while</span> <span class="br0">&#40;</span>dt <span class="sy1">&gt;=</span> <span class="nu0">1000</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>		<span class="co1">// tally the full seconds</span>
+		dt <span class="sy2">-</span><span class="sy1">=</span> <span class="nu0">1000</span><span class="sy4">;</span>
+		incVar<span class="br0">&#40;</span>v_second<span class="br0">&#41;</span><span class="sy4">;</span>
+		<span class="kw1">if</span> <span class="br0">&#40;</span>getValue<span class="br0">&#40;</span><span class="st0">&quot;onsecond&quot;</span><span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">0</span><span class="br0">&#41;</span> doCommand<span class="br0">&#40;</span><span class="st0">&quot;onsecond&quot;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+		<span class="kw1">while</span> <span class="br0">&#40;</span>getVar<span class="br0">&#40;</span>v_second<span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">60</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+			assignVar<span class="br0">&#40;</span>v_second, getVar<span class="br0">&#40;</span>v_second<span class="br0">&#41;</span> <span class="sy2">-</span> <span class="nu0">60</span><span class="br0">&#41;</span><span class="sy4">;</span>
+			incVar<span class="br0">&#40;</span>v_minute<span class="br0">&#41;</span><span class="sy4">;</span>
+			<span class="kw1">if</span> <span class="br0">&#40;</span>getValue<span class="br0">&#40;</span><span class="st0">&quot;onminute&quot;</span><span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">0</span><span class="br0">&#41;</span> doCommand<span class="br0">&#40;</span><span class="st0">&quot;onminute&quot;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+			<span class="kw1">while</span> <span class="br0">&#40;</span>getVar<span class="br0">&#40;</span>v_minute<span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">60</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+				assignVar<span class="br0">&#40;</span>v_minute, getVar<span class="br0">&#40;</span>v_minute<span class="br0">&#41;</span> <span class="sy2">-</span> <span class="nu0">60</span><span class="br0">&#41;</span><span class="sy4">;</span>
+				incVar<span class="br0">&#40;</span>v_hour<span class="br0">&#41;</span><span class="sy4">;</span>
+				<span class="kw1">if</span> <span class="br0">&#40;</span>getValue<span class="br0">&#40;</span><span class="st0">&quot;onhour&quot;</span><span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">0</span><span class="br0">&#41;</span> doCommand<span class="br0">&#40;</span><span class="st0">&quot;onhour&quot;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+				<span class="kw1">while</span> <span class="br0">&#40;</span>getVar<span class="br0">&#40;</span>v_hour<span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">24</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+					incVar<span class="br0">&#40;</span>v_day<span class="br0">&#41;</span><span class="sy4">;</span>
+					<span class="kw1">if</span> <span class="br0">&#40;</span>getValue<span class="br0">&#40;</span><span class="st0">&quot;onday&quot;</span><span class="br0">&#41;</span> <span class="sy1">&gt;=</span> <span class="nu0">0</span><span class="br0">&#41;</span> doCommand<span class="br0">&#40;</span><span class="st0">&quot;onday&quot;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+					assignVar<span class="br0">&#40;</span>v_hour, getVar<span class="br0">&#40;</span>v_hour<span class="br0">&#41;</span> <span class="sy2">-</span> <span class="nu0">24</span><span class="br0">&#41;</span><span class="sy4">;</span>
+				<span class="br0">&#125;</span>
+			<span class="br0">&#125;</span>
+		<span class="br0">&#125;</span>
+	<span class="br0">&#125;</span>
+	assignVar<span class="br0">&#40;</span>v_epoch, now <span class="sy2">-</span> dt<span class="br0">&#41;</span><span class="sy4">;</span>	<span class="co1">// put back remainder</span>
+<span class="br0">&#125;</span>

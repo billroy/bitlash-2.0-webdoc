@@ -1,0 +1,87 @@
+===== The Bitlash Language =====
+
+----
+==== How It Works: The Bitlash Execution Model ====
+
+It helps to start by thinking of Bitlash as a dumb command line calculator.  You type a line of commands and press Enter; Bitlash interprets the line and returns you to the prompt.
+
+It may help to formalize the idea of [[bitlashfunctions|Bitlash Functions]] a little bit, too.  A function is a command line, with a name, stored in EEPROM.  When you invoke to a function by using its name, Bitlash suspends what it's doing working your main command to execute the function, which is interpreted just as though you typed the function's text.  Effectively it is a subroutine call.
+
+Think of background functions as stored command lines scheduled to be run periodically.  When you say **run toggle13,1000**, it means "whatever else may be happening, please execute the **toggle13** function about every 1000 milliseconds."
+
+==== Grammar, from the top down ====
+
+So, then, a little more formally:
+
+A command line is one or more statements separated by semicolons.
+
+A statement, in turn, is either a command, an assignment, or an expression.
+
+A command is one of: [boot help if ls peep print ps rm run snooze stop switch while].  See [[Commands]] for details.
+
+An assignment is of the form variable = expression.
+
+Read on for more on variables, expressions, and operators.
+----
+
+==== Built-in Numeric Variables: ['a'..'z'] ====
+
+You get 26 built-in 32-bit signed integer variable named lowercase 'a' through lowercase 'z'.  These variables are initialized to zero at boot time like any other C storage.
+
+<code>
+> i=10; while i-- print i, 
+9876543210> 
+</code>
+----
+==== Pin Variables: Names for the Arduino Pins [a0..a7] and [d0..d22] ====
+
+You can refer to specific analog and digital pins using **pin variables**.  Pin variables are of the form a0, a1, a2, ... a7 and d0, d1, d2, ... d22.
+When a pin variable is used in an expression it is a shorthand for digitalRead (for the d0.d22 pin variables) or analogRead (for a0..a7).
+<code>
+> x=d4		// digitalRead(4) and save it in x
+> print x, a6	// print digitalRead(4) and analogRead(6)
+</code>
+Assigning to a digital pin variable does as you would expect: it turns the output on or off, just like digitalWrite.
+<code>
+> d13 = 1		// turn on D13
+</code>
+Assigning to the a-pin variables is a little tricky.  You might think from the name that it does some sort of output to an analog pin.  But, not so.  Assigning to an analog pin variable does analogWrite, which is PWM output to a DIGITAL PIN!!
+<code>
+> pinmode(5, 1)	// set D5 to digital output mode
+> a5 = 128	// generate 50% duty cycle PWM on pin 5
+</code>
+----
+
+==== Numeric Constants ====
+
+Decimal signed numeric constants in the range of a 32-bit signed integer are supported as you would expect.
+Hex constants of the form 0xHHHHHHHH also work, as do single-quoted ascii character constants like 'q'.
+Binary constants of the form 0b01010101 are also supported.
+----
+
+==== String Constants ====
+
+String constants can be used within the Print statement.  A string standing alone is treated as a comment and ignored.
+The rules for special characters in string constants are similar to C.  The backslash character specifies that an escape sequence is to follow.  Here are the supported escapes:
+<code>
+\r		0d		carriage return
+\n		0a		linefeed
+\t		09		tab
+\\		'\'		a backslash
+\"		'"'		a double quote
+\xHH	???		hex character specified by HH
+</code>
+For example, some terminal emulators will beep if you send them an Ascii BEL character (07):
+<code>
+> print "\x07",		// beep!
+</code>
+The hex form is especially useful in crafting escape sequences to print to peripheral devices.
+----
+
+==== Operators and Precedence ====
+
+Bitlash supports a very complete subset of the C operator suite, with very similar precedence rules.
+Here are the supported operators, with meanings as in standard C:
+<code>
+ + - * / ( ) < <= > >= == != << >> ^ & | ++ --
+</code>

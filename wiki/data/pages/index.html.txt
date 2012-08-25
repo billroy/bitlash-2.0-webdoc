@@ -1,0 +1,49 @@
+===== Bitlash Online =====
+Welcome to Bitlash Online.
+
+Bitlash is an open source interpreted language shell.  This website documents Bitlash for the popular and useful [[http://arduino.cc|Arduino]].
+
+The Bitlash interpreter runs entirely on the Arduino and interprets commands that you type in a terminal window or send programmatically to the serial port:
+<code>
+bitlash here! v1.0 (c) 2010 Bill Roy -type HELP- 1383 bytes free
+> print "Hello, world!", millis()
+Hello, world! 11939
+> 
+</code>
+
+==== Quick Start ====
+  * {{bitlash-1-release.zip|Download}} the latest release of Bitlash for the Arduino
+  * [[Install]] Bitlash and upload it to your Arduino
+  * Proceed to the [[docindex|Documentation Index]]
+  * Read more [[about|About Bitlash]] and the [[Author]]
+----
+
+==== What is Bitlash? ====
+
+Bitlash is an embedded interpreter that runs in about 14k of memory on an Atmel AVR processor.  It works nicely with Arduino to make a development and prototyping tool for those situations where you need to bang some bits on the Arduino but writing a sketch in C is premature.  It's very convenient for bringing up and debugging new hardware.
+
+The Bitlash command language is very similar to Arduino C and includes a large repertiore of the familiar Arduino C functions so you can hack your hardware from the serial command line or even over the internet via telnet.
+
+You can store commands as macros in EEPROM and autostart them at bootup, making the automation and maintenance of small applications very easy.  Here is the classic Blink13 program as a complete Bitlash application in two macros, **toggle13** to toggle the led and **startup** to initialize and run it:
+<code>
+> toggle13:="d13=!d13"
+> startup:="pinmode(13,1);run toggle13,1000"
+> boot
+(d13 flashes)
+</code>
+
+----
+==== Release Announcements ====
+
+=== Bitlash 1.0 Available Now ===
+
+After over a year in development Bitlash 1.0 is available for {{bitlash-1-release.zip|download}}.
+
+The is one bug fix since the RC2 version, renaming the folders and files in the /examples tree to remove the '-' which became deprecated in Arduino 0017.
+
+Bitlash 1.0 is tested on [[http://arduino.cc/en/Main/Software|Arduino 0017]] and [[http://code.google.com/p/arduino/downloads/list|Arduino 0018 RC1]].  The [[install]] instructions are updated for 0017.  
+
+== Documentation Overhaul ==
+
+The Bitlash documentation is now hosted in this wiki.  Please send comments to the [[Author]]
+----

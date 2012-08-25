@@ -1,0 +1,138 @@
+
+<h2 class="sectionedit1"><a name="background_functions" id="background_functions">Background Functions</a></h2>
+<div class="level2">
+
+<p>
+Bitlash can run up to 8 functions in the background while you work in the foreground at the command prompt.
+</p>
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "Background Functions" [1-148] -->
+<h3 class="sectionedit2"><a name="the_run_command" id="the_run_command">The Run Command</a></h3>
+<div class="level3">
+
+<p>
+The <strong>run</strong> command runs a function in the background:
+</p>
+<pre class="code">&gt; run toggle13	// LED on D13 starts flashing
+&gt;	// and you get the foreground prompt back</pre>
+
+<p>
+Think of the run X command as being a “while 1 X” that runs in the time between 
+your keystrokes. 
+</p>
+
+<p>
+In the above example, toggle13 will be called Very Frequently, perhaps as often as once each time your loop() procedure calls runBitlash().
+</p>
+
+<p>
+Bitlash stops all background functions when you press ^C.  You can also stop a specific one using ps (to discover its process id) and stop.
+</p>
+<pre class="code">&gt; ps			// list running background functions
+0: toggle13		// toggle13 is number 0
+&gt; stop 0		// or stop * or ^C to stop all
+&gt;</pre>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "The Run Command" [149-861] -->
+<h3 class="sectionedit3"><a name="run_commandoptional_snoozems_argument_and_changes_to_snooze" id="run_commandoptional_snoozems_argument_and_changes_to_snooze">Run Command: Optional [,snoozems] argument and changes to snooze()</a></h3>
+<div class="level3">
+
+<p>
+The “run” command has an optional <strong>snoozems</strong> argument to provide control over how often each background task is run.  This is convenient for tasks that run on a fixed timer: many functions can dispense with the snoozing thing entirely if the runtime interval is known when the function is started.
+</p>
+
+<p>
+For example, this will run the function t1 every 27 millis or so:
+</p>
+<pre class="code">run t1,27</pre>
+
+<p>
+If the optional <strong>snoozems</strong> argument is not specified it is treated as zero: in other words, you must manage the snooze interval in your function&#039;s code; see below.
+</p>
+
+<p>
+This change also has a small impact on semantics of the snooze() function.  Previously, snooze() would set the time-at-which-the-task-is-eligible to run immediately when called.
+</p>
+
+<p>
+The new behavior is subtly different: the scheduling takes place somewhat later, when the function exits the current invocation, not at the time of some call to snooze().  Bitlash maintains a snoozems value for each background task; by default it is zero, and the task is called as fast as the round-robin gets back to it.  If you specify a value in the run command or by calling snooze, this value is saved and applied in the rescheduling calculation when the task exits.
+</p>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "Run Command: Optional [,snoozems] argument and changes to snooze()" [862-2157] -->
+<h3 class="sectionedit4"><a name="run_your_application_automatically_in_the_background" id="run_your_application_automatically_in_the_background">Run Your Application Automatically in the Background</a></h3>
+<div class="level3">
+
+<p>
+Use the startup function to do a run on your top-level function and your application
+can run in the background while you have control of the keyboard to poke at it:
+</p>
+<pre class="code">&gt; function startup {run myapp}
+&gt; boot
+bitlash here! v2.0...
+&gt;ps
+0:myapp</pre>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Run Your Application Automatically in the Background" [2158-2479] -->
+<h3 class="sectionedit5"><a name="don_t_delay_use_snooze_instead" id="don_t_delay_use_snooze_instead">Don&#039;t delay(); use snooze() instead</a></h3>
+<div class="level3">
+
+<p>
+If your objective is to present the illusion of multitasking, you should avoid
+using the delay() function in functions, since everything else comes to a screeching halt while 
+delay() is happening.
+</p>
+
+<p>
+Foreground keyboard entry may become sluggish if you have many tasks with delay()s more than a few millis each.
+</p>
+
+<p>
+Bitlash provides the snooze(ms) function to give your background function tasks a way to delay without hogging the CPU. Bitlash suspends a task which calls snooze() until the specified number of millis has passed.
+</p>
+
+<p>
+NOTE: Calling snooze() has no apparent immediate effect. Your function continues to execute, if there is further code after the snooze(). But bitlash will not re-enter  your task until the specified time has passed.
+</p>
+
+<p>
+Here is an improved toggle13 that uses snooze() instead of delay():
+</p>
+<pre class="code">&gt; function snooze13 {d13=!d13; snooze(100);}
+&gt; run snooze13
+&gt;</pre>
+
+<p>
+Since snooze() means “don&#039;t call me again for a while” instead of “please spin away some time”, you will find that your foreground typing and responsiveness of other background functions is much improved compared with “run toggle13”.
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "Don't delay(); use snooze() instead" [2480-3655] -->
+<h3 class="sectionedit6"><a name="exampleasynchronous_background_tasks" id="exampleasynchronous_background_tasks">Example: Asynchronous Background Tasks</a></h3>
+<div class="level3">
+
+<p>
+Here is an example of three asynchronous background tasks each doing its thing on its own little timeline, using snooze() to set its calling interval:
+</p>
+<pre class="code">&gt; function chirp {print &quot;chirp &quot;,; snooze(2500);}
+&gt; function eep {print &quot;eep &quot;,; snooze(800);}
+&gt; function ribbit {print &quot;ribbit &quot;,; snooze(3500);}
+&gt; function nightfall {run eep;run chirp;run ribbit;ps}
+&gt; nightfall
+0:eep
+1:chirp
+2:ribbit
+&gt; eep chirp ribbit eep eep eep chirp eep
+ribbit eep eep chirp eep eep ribbit eep 
+chirp eep ^C</pre>
+
+</div>
+<!-- EDIT6 SECTION "Example: Asynchronous Background Tasks" [3656-] -->

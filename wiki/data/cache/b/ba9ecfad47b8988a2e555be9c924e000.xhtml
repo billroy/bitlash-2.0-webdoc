@@ -1,0 +1,180 @@
+
+<h2 class="sectionedit1"><a name="porting_bitlash" id="porting_bitlash">Porting Bitlash</a></h2>
+<div class="level2">
+
+<p>
+
+Here is documentation on how to get Bitlash up and running on various hardware combinations.
+
+</p>
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "Porting Bitlash" [1-128] -->
+<h3 class="sectionedit2"><a name="telnet_to_your_arduinoadafruit_xport_direct_ethernet_shield" id="telnet_to_your_arduinoadafruit_xport_direct_ethernet_shield">Telnet to your Arduino: AdaFruit Xport Direct Ethernet Shield</a></h3>
+<div class="level3">
+
+<p>
+
+Bitlash 0.9 includes working support for the AdaFruit Ethernet Shield with Lantronix XPort Direct.  The configuration is set up to allow you to telnet in to your Arduino and control it with Bitlash.
+The quick summary: 
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Build and wire the shield per AdaFruit instructions.</div>
+</li>
+<li class="level1"><div class="li"> Configure the XPort Direct per below.</div>
+</li>
+<li class="level1"><div class="li"> Paste bitlash.cpp into an empty Arduino 0012 sketch window.</div>
+</li>
+<li class="level1"><div class="li"> Find the AF_ETHERNET define.  </div>
+</li>
+<li class="level1"><div class="li"> Remove the comment bars before the define to enable it, and upload the code.</div>
+</li>
+<li class="level1"><div class="li"> Telnet to your Arduino on port 10001.</div>
+</li>
+</ul>
+
+</div>
+
+<h5><a name="configure_the_xport_direct" id="configure_the_xport_direct">Configure the XPort Direct</a></h5>
+<div class="level5">
+
+<p>
+Make sure your Xport Direct is set up like this:
+
+</p>
+<pre class="code">*** Channel 1
+Baudrate 9600, I/F Mode 4C, Flow 00
+Port 10001
+Connect Mode : D4
+Send &#039;+++&#039; in Modem Mode enabled
+Show IP addr after &#039;RING&#039; enabled
+Auto increment source port disabled
+Remote IP Adr: --- none ---, Port 00000
+Disconn Mode : 00
+Flush   Mode : 00</pre>
+
+<p>
+
+This configuration sets up for incoming telnet on port 10001.  If you would prefer a different port, configure it in the “port” parameter of Channel 1.
+</p>
+
+</div>
+
+<h5><a name="connect_via_telnet_but_do_use_mode_char" id="connect_via_telnet_but_do_use_mode_char">Connect via telnet, but do use MODE CHAR!</a></h5>
+<div class="level5">
+
+<p>
+Use your favorite Telnet program to connect, and off you go.
+</p>
+
+<p>
+One little thing.  You MUST use “mode character” in the telnet program.  If you don&#039;t, you&#039;ll see garbage as the XPort swamps the Arduino with a whole line of data at a time.
+</p>
+<pre class="code">bitlash:~ bitl$ telnet 192.168.0.16 10001
+Trying 192.168.0.16...
+Connected to 192.168.0.16.
+Escape character is &#039;^]&#039;.
+^]			// type this to talk to telnet
+telnet&gt; mode char	// type this to set character mode
+&gt; boot		// just to show the banner
+bitlash v0.9d here! (c) 2008 Bill Roy -type HELP- 1383 bytes free
+&gt; </pre>
+
+<p>
+Now you are connected to Bitlash on your Arduino over the internet.  Anything you used to do locally with Bitlash, you can now do from anywhere.
+
+</p>
+<ul>
+<li class="level1"><div class="li"> Consider setting a password on the XPort.  It&#039;s in the settings interface.</div>
+</li>
+<li class="level1"><div class="li"> You can print to the hardware serial port and therefore debug via USB using print #1:“foo”</div>
+</li>
+<li class="level1"><div class="li"> If all you want is to use the XPort for output, you can use the normal Bitlash without the AF_ETHERNET define and use print #2:“foo” to print to the XPort thence onward to the net.</div>
+</li>
+</ul>
+
+</div>
+
+<h5><a name="other_ethernet_interfaces" id="other_ethernet_interfaces">Other Ethernet Interfaces</a></h5>
+<div class="level5">
+
+<p>
+
+The same serial io interface used for the AdaFruit/Lantronix XPort Direct should work with suitable adjustments on other network adapters as well.  The reader is encouraged to experiment and report back with interesting findings.
+
+</p>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "Telnet to your Arduino: AdaFruit Xport Direct Ethernet Shield" [129-2640] -->
+<h3 class="sectionedit3"><a name="bitlash_on_the_atmega328p" id="bitlash_on_the_atmega328p">Bitlash on the ATMega328P</a></h3>
+<div class="level3">
+
+<p>
+
+We&#039;ve got Bitlash 0.9 working with the <a href="http://www.adafruit.com/index.php?main_page=product_info&amp;cPath=17&amp;products_id=123'%3EAdaFruit preprogrammed Atmega328 chip for twice the PROGMEM flash and twice the EEPROM space.  Bitlash 0.9 automatically detects the '328 and does the right thing at compile time to use the extra space.
+[[http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1226117225/2" class="urlextern" title="http://www.adafruit.com/index.php?main_page=product_info&amp;cPath=17&amp;products_id=123&#039;&gt;AdaFruit preprogrammed Atmega328 chip for twice the PROGMEM flash and twice the EEPROM space.  Bitlash 0.9 automatically detects the &#039;328 and does the right thing at compile time to use the extra space.
+[[http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1226117225/2"  rel="nofollow">http://www.adafruit.com/index.php?main_page=product_info&amp;cPath=17&amp;products_id=123&#039;&gt;AdaFruit preprogrammed Atmega328 chip for twice the PROGMEM flash and twice the EEPROM space.  Bitlash 0.9 automatically detects the &#039;328 and does the right thing at compile time to use the extra space.
+[[http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1226117225/2</a>
+</p>
+
+<p>
+These instructions from extremis on the Arduino board were very helpful in setting up the Arduino environment for the &#039;328, but be prepared for a little experimentation since it&#039;s all still pre-production.
+</p>
+
+<p>
+It does not appear that this &#039;328 bootloader sets pinMode(13,OUTPUT) like the Arduino stock bootloader does.  So set pinmode(13,1) yourself if you want to use the debug LED.
+
+</p>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "Bitlash on the ATMega328P" [2641-3458] -->
+<h3 class="sectionedit4"><a name="bitlash_on_the_sanguino_atmega644" id="bitlash_on_the_sanguino_atmega644">Bitlash on the Sanguino ATMega644</a></h3>
+<div class="level3">
+
+<p>
+
+The <a href="http://sanguino.cc" class="urlextern" title="http://sanguino.cc"  rel="nofollow">Sanguino</a> is an awesome big brother to Arduino.  It&#039;s based on the ATMega644 with 4x the EEPROM and flash.  Preliminary Bitlash support is up and running in 0.9 with the Sanguino 1.3 software - including proper setup and use of the two hardware UART channels and the bigger EEPROM data store.  Be aware there are serial port issues that require a patch so please ping for details if you have a Sanguino.
+Here are some notes from the port:
+
+</p>
+<ul>
+<li class="level1"><div class="li"> EEPROM size is 2048</div>
+</li>
+<li class="level1"><div class="li"> Free ram is big (&gt; 3k)</div>
+</li>
+<li class="level1"><div class="li"> 64k program space</div>
+</li>
+<li class="level1"><div class="li"> primary serial tx out is pin 9</div>
+</li>
+<li class="level1"><div class="li"> secondary serial tx out is pin 11</div>
+</li>
+<li class="level1"><div class="li"> these have interrupt driven buffered io</div>
+</li>
+<li class="level1"><div class="li"> digital pins [0..23] - debug LED on D0 not D13</div>
+</li>
+<li class="level1"><div class="li"> analog pins [0..7] - use caution for inverted mapping to d24..d32 compared with Arduino/168</div>
+</li>
+</ul>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "Bitlash on the Sanguino ATMega644" [3459-4312] -->
+<h3 class="sectionedit5"><a name="other_tested_configurations" id="other_tested_configurations">Other tested configurations</a></h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> Arduino Diecimila</div>
+</li>
+<li class="level1"><div class="li"> Sparkfun Wee</div>
+</li>
+<li class="level1"><div class="li"> Sparkfun Pro Mini</div>
+</li>
+<li class="level1"><div class="li"> Stickduino</div>
+</li>
+</ul>
+
+</div>
+<!-- EDIT5 SECTION "Other tested configurations" [4313-] -->

@@ -1,0 +1,16 @@
+===== Bitlash Downloads =====
+
+When you're done here, proceed to the [[install]] page.
+==== Current release ====
+
+{{bitlash-2.0-RC1.zip|Download Bitlash 2.0 RC1}}
+
+----
+
+==== Previous releases ====
+
+The documentation wiki for Bitlash 1.1 is available for reference at the [[http://bitlash11.bitlash.net|Bitlash v1.1 Site Archive]]
+
+{{bitlash-11-release.zip|Download Bitlash 1.1}}
+
+{{bitlash-1-release.zip|Download Bitlash 1.0}}

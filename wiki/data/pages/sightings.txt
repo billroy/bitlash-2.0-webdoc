@@ -1,0 +1,12 @@
+===== Bitlash Sightings =====
+
+Here are some links to interesting things people have done with Bitlash.
+
+Send us your link and we'll be happy to include it.
+
+* [[http://www.ruggedcircuits.com/html/software.html|Rugged Circuits]] sells a family of products called the GATOR Board based on the Atmel ATMega324P and has been kind enough to link to Bitlash on their software page.
+
+* coopermaa from the Arduino Forums has published a [[http://coopermaa2nd.blogspot.com/2011/02/arduini-bitlash.html|Guide to learning Arduino in Chinese]]
+
+* Here's an [[https://github.com/echoline/bitlash-terminal/blob/master/bitlashterm.pde|Arduino Terminal based on Bitlash]] on Github
+

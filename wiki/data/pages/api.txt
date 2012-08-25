@@ -1,0 +1,123 @@
+===== Bitlash API =====
+
+Your Arduino C program can interact with Bitlash using the functions documented here.
+Of course, in the tiny and open world of Arduino most everything is visible globally.  So feel free to dive in and call what you need.  The entry points documented here are intended to be reasonably well hardened for third party use.
+----
+
+
+==== initBitlash(baudrate); ====
+
+You must call this first, normally from setup(), to initialize Bitlash and set the serial port baud rate.  
+
+----
+==== runBitlash(); ====
+
+You must call runBitlash() from your loop() function to make Bitlash go.  The more frequently you call runBitlash(), the more smoothly foreground and background activity will run.  If you don't call runBitlash(), nothing will happen.
+----
+
+=== Example: Simple Integration ===
+
+This is the minimum possible integration, and in fact it is the bones of the code that you will see at the bottom of bitlashdemo.pde:
+<file cpp simple.pde>
+void setup(void) {
+	initBitlash(57600);
+}
+
+void loop(void) {
+	runBitlash();
+	// YourOtherCodeHere();
+}
+</file>
+
+----
+
+==== doCommand(char *command); ====
+
+A simple way to control Bitlash is to use the doCommand() function to execute commands from your code.  Your code can call doCommand() to make Bitlash "do stuff" -- anything you can type, actually, up to the buffer size limit.
+Here's a dumb example that leads up to our next big case study: this code spends a lot of energy looking for the precise millisecond to beep at the top of the hour:
+<code>
+void setup(void) {
+	initBitlash(57600);
+}
+
+void loop(void) {
+	runBitlash();
+	// beep at the top of the elapsed hour
+	if (millis() % (60*60*1000) == 0) doCommand("beep(11,440,1000)")
+}
+</code>
+Lots of ways to do this better (read on for one example), but the takeaway point is that your C code can drive Bitlash.
+----
+
+==== doCharacter(char c) ====
+
+It is also possible to drive Bitlash's internal command line editor one character at a time.  This is convenient if you have a character input device.
+
+Bitlash will buffer and echo each character until you send a carriage return '\r' or linefeed, whereupon it will execute the line, the same way it works from the console.
+
+See the examples/bitlashtelnet2.pde telnet server for a sample integration using doCharacter().
+
+----
+
+==== Console redirection with setOutputHandler() ====
+
+You can arrange to capture all the output that Bitlash would normally send to the console serial port, and redirect it to suit your application.  Use the setOutputHandler() api to direct Bitlash to route its output to your character-handling function, which should be defined as taking a single byte and returning a void, as in:
+
+    setup() {
+        ...
+        setOutputHandler(&serialHandler);
+    }
+    
+    void serialHandler(byte b) {
+        ...
+    }
+
+There are four examples in the Bitlash distribution that show how this works:
+
+See examples/loutbitlash.pde for a silly example that optionally makes all the output uppercase (therefore loud).
+
+See examples/bitlashtelnet.pde for an example implementing both input injection and output capture.  examples/bitlashtelnet2.pde is similar but uses the doCharacter() api instead of doCommand().
+
+And of course the Bitlash web server, BitlashWebServer, uses this console redirection capability.  See examples/BitlashWebServer.pde
+
+----
+
+==== User Functions: addBitlashFunction() and getArg() ====
+
+You can extend Bitlash at compile time by adding "C User Functions" to the built-in function library.  See the [[userfunctions|User Functions]] page for details.
+
+----
+
+==== Manipulating Bitlash Variables from C ====
+
+Bitlash has 26 variables named a through z.  These are 32-bit signed integer values.  Your code can read and write these values using a few simple functions.  This allows your C code to control code running in Bitlash, and vice versa.
+
+You refer to a variable using an integer index in the range [0..25] corresponding to ['a'..'z'].  For example, here is how your code could use the getVar command to read out the value of the bitlash variable 't' and put it into the signed long C variable named 'temperature':
+<code>
+void loop(void) {
+	...
+	long temperature = getVar('t'-'a');	
+	...
+</code>
+
+Here are the three API functions for Bitlash variable manipulation.  Examples of their use are shown below in the clock application.
+
+==== assignVar(char var, long value); ====
+Assigns the (signed long 32-bit integer) value to the indicated Bitlash variable.
+<code>
+assignVar(0,42);		// a=42
+// note this stylish notation to calculate the var index:
+assignVar('i'-'a', 33);	// i=33
+</code>
+----
+==== long x = getVar(char var); ====
+Returns the value of the given Bitlash variable.
+<code>
+long temperature = getVar('t'-'a');	</code>
+----
+==== incVar(var); ====
+Increments the designated Bitlash variable.
+<code>
+incVar('i'-'a');		// i++
+</code>
+----

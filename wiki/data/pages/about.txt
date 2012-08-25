@@ -1,0 +1,10 @@
+===== About Bitlash =====
+
+Bitlash was written by Bill Roy and is Copyright 2011 Palmeta Productions, LLC.
+
+Bitlash is made available under an Open Source license; see the [[License]] here.  Alternate commercial license terms are available from the [[Author]].
+==== The Entropymouse Capers ====
+
+The author writes from time to time about Bitlash and other things which escape from his laboratory at his weblog, [[http://entropymouse.com|The Entropymouse Capers]].
+
+~~(@):>

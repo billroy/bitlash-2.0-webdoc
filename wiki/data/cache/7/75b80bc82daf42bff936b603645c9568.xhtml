@@ -1,0 +1,195 @@
+
+<h2 class="sectionedit1"><a name="bitlash_api" id="bitlash_api">Bitlash API</a></h2>
+<div class="level2">
+
+<p>
+Your Arduino C program can interact with Bitlash using the functions documented here.
+Of course, in the tiny and open world of Arduino most everything is visible globally.  So feel free to dive in and call what you need.  The entry points documented here are intended to be reasonably well hardened for third party use.
+</p>
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "Bitlash API" [1-352] -->
+<h3 class="sectionedit2"><a name="initbitlash_baudrate" id="initbitlash_baudrate">initBitlash(baudrate);</a></h3>
+<div class="level3">
+
+<p>
+You must call this first, normally from setup(), to initialize Bitlash and set the serial port baud rate.  
+</p>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "initBitlash(baudrate);" [353-500] -->
+<h3 class="sectionedit3"><a name="runbitlash" id="runbitlash">runBitlash();</a></h3>
+<div class="level3">
+
+<p>
+You must call runBitlash() from your loop() function to make Bitlash go.  The more frequently you call runBitlash(), the more smoothly foreground and background activity will run.  If you don&#039;t call runBitlash(), nothing will happen.
+</p>
+<hr />
+
+</div>
+
+<h4><a name="examplesimple_integration" id="examplesimple_integration">Example: Simple Integration</a></h4>
+<div class="level4">
+
+<p>
+This is the minimum possible integration, and in fact it is the bones of the code that you will see at the bottom of bitlashdemo.pde:
+</p>
+<dl class="file">
+<dt><a href="/wiki/_export/code/api?codeblock=0" title="Download Snippet" class="mediafile mf_pde">simple.pde</a></dt>
+<dd><pre class="code file cpp"><span class="kw4">void</span> setup<span class="br0">&#40;</span><span class="kw4">void</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	initBitlash<span class="br0">&#40;</span><span class="nu0">57600</span><span class="br0">&#41;</span><span class="sy4">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw4">void</span> loop<span class="br0">&#40;</span><span class="kw4">void</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	runBitlash<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy4">;</span>
+	<span class="co1">// YourOtherCodeHere();</span>
+<span class="br0">&#125;</span></pre>
+</dd></dl>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "runBitlash();" [501-1076] -->
+<h3 class="sectionedit4"><a name="docommand_char_command" id="docommand_char_command">doCommand(char *command);</a></h3>
+<div class="level3">
+
+<p>
+A simple way to control Bitlash is to use the doCommand() function to execute commands from your code.  Your code can call doCommand() to make Bitlash “do stuff” – anything you can type, actually, up to the buffer size limit.
+Here&#039;s a dumb example that leads up to our next big case study: this code spends a lot of energy looking for the precise millisecond to beep at the top of the hour:
+</p>
+<pre class="code">void setup(void) {
+	initBitlash(57600);
+}
+
+void loop(void) {
+	runBitlash();
+	// beep at the top of the elapsed hour
+	if (millis() % (60*60*1000) == 0) doCommand(&quot;beep(11,440,1000)&quot;)
+}</pre>
+
+<p>
+Lots of ways to do this better (read on for one example), but the takeaway point is that your C code can drive Bitlash.
+</p>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "doCommand(char *command);" [1077-1830] -->
+<h3 class="sectionedit5"><a name="docharacter_char_c" id="docharacter_char_c">doCharacter(char c)</a></h3>
+<div class="level3">
+
+<p>
+It is also possible to drive Bitlash&#039;s internal command line editor one character at a time.  This is convenient if you have a character input device.
+</p>
+
+<p>
+Bitlash will buffer and echo each character until you send a carriage return &#039;\r&#039; or linefeed, whereupon it will execute the line, the same way it works from the console.
+</p>
+
+<p>
+See the examples/bitlashtelnet2.pde telnet server for a sample integration using doCharacter().
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "doCharacter(char c)" [1831-2288] -->
+<h3 class="sectionedit6"><a name="console_redirection_with_setoutputhandler" id="console_redirection_with_setoutputhandler">Console redirection with setOutputHandler()</a></h3>
+<div class="level3">
+
+<p>
+You can arrange to capture all the output that Bitlash would normally send to the console serial port, and redirect it to suit your application.  Use the setOutputHandler() api to direct Bitlash to route its output to your character-handling function, which should be defined as taking a single byte and returning a void, as in:
+</p>
+<pre class="code">  setup() {
+      ...
+      setOutputHandler(&amp;serialHandler);
+  }
+  
+  void serialHandler(byte b) {
+      ...
+  }</pre>
+
+<p>
+There are four examples in the Bitlash distribution that show how this works:
+</p>
+
+<p>
+See examples/loutbitlash.pde for a silly example that optionally makes all the output uppercase (therefore loud).
+</p>
+
+<p>
+See examples/bitlashtelnet.pde for an example implementing both input injection and output capture.  examples/bitlashtelnet2.pde is similar but uses the doCharacter() api instead of doCommand().
+</p>
+
+<p>
+And of course the Bitlash web server, BitlashWebServer, uses this console redirection capability.  See examples/BitlashWebServer.pde
+</p>
+<hr />
+
+</div>
+<!-- EDIT6 SECTION "Console redirection with setOutputHandler()" [2289-3334] -->
+<h3 class="sectionedit7"><a name="user_functionsaddbitlashfunction_and_getarg" id="user_functionsaddbitlashfunction_and_getarg">User Functions: addBitlashFunction() and getArg()</a></h3>
+<div class="level3">
+
+<p>
+You can extend Bitlash at compile time by adding “C User Functions” to the built-in function library.  See the <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">User Functions</a> page for details.
+</p>
+<hr />
+
+</div>
+<!-- EDIT7 SECTION "User Functions: addBitlashFunction() and getArg()" [3335-3564] -->
+<h3 class="sectionedit8"><a name="manipulating_bitlash_variables_from_c" id="manipulating_bitlash_variables_from_c">Manipulating Bitlash Variables from C</a></h3>
+<div class="level3">
+
+<p>
+Bitlash has 26 variables named a through z.  These are 32-bit signed integer values.  Your code can read and write these values using a few simple functions.  This allows your C code to control code running in Bitlash, and vice versa.
+</p>
+
+<p>
+You refer to a variable using an integer index in the range [0..25] corresponding to [&#039;a&#039;..&#039;z&#039;].  For example, here is how your code could use the getVar command to read out the value of the bitlash variable &#039;t&#039; and put it into the signed long C variable named &#039;temperature&#039;:
+</p>
+<pre class="code">void loop(void) {
+	...
+	long temperature = getVar(&#039;t&#039;-&#039;a&#039;);	
+	...</pre>
+
+<p>
+Here are the three <acronym title="Application Programming Interface">API</acronym> functions for Bitlash variable manipulation.  Examples of their use are shown below in the clock application.
+</p>
+
+</div>
+<!-- EDIT8 SECTION "Manipulating Bitlash Variables from C" [3565-4341] -->
+<h3 class="sectionedit9"><a name="assignvar_char_var_long_value" id="assignvar_char_var_long_value">assignVar(char var, long value);</a></h3>
+<div class="level3">
+
+<p>
+Assigns the (signed long 32-bit integer) value to the indicated Bitlash variable.
+</p>
+<pre class="code">assignVar(0,42);		// a=42
+// note this stylish notation to calculate the var index:
+assignVar(&#039;i&#039;-&#039;a&#039;, 33);	// i=33</pre>
+<hr />
+
+</div>
+<!-- EDIT9 SECTION "assignVar(char var, long value);" [4342-4602] -->
+<h3 class="sectionedit10"><a name="long_x_getvar_char_var" id="long_x_getvar_char_var">long x = getVar(char var);</a></h3>
+<div class="level3">
+
+<p>
+Returns the value of the given Bitlash variable.
+</p>
+<pre class="code">long temperature = getVar(&#039;t&#039;-&#039;a&#039;);	</pre>
+<hr />
+
+</div>
+<!-- EDIT10 SECTION "long x = getVar(char var);" [4603-4744] -->
+<h3 class="sectionedit11"><a name="incvar_var" id="incvar_var">incVar(var);</a></h3>
+<div class="level3">
+
+<p>
+Increments the designated Bitlash variable.
+</p>
+<pre class="code">incVar(&#039;i&#039;-&#039;a&#039;);		// i++</pre>
+<hr />
+
+</div>
+<!-- EDIT11 SECTION "incVar(var);" [4745-] -->

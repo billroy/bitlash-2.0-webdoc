@@ -1,0 +1,32 @@
+===== Bitlash Documentation Index =====
+==== To Begin ====
+
+  * [[download|Download]] the latest release of Bitlash
+  * How to [[install]] Bitlash\\
+  * Please note the Bitlash [[license]] terms\\
+
+==== Learning Bitlash ====
+
+  * About the [[language]] \\
+  * [[Conditionals]]: if, while, and switch \\
+  * Top-level [[commands]]\\
+  * [[Functions|Built-in Functions]]\\
+  * [[Printing]]\\
+  * Writing [[bitlashfunctions|Bitlash Functions]]
+  * Run a function in the [[backgroundfunctions|background]]\\
+==== Integrating Bitlash ====
+
+  * [[architecture|Bitlash Architecture]]
+  * Using Bitlash from your C program: The Bitlash [[api]] \\
+  * Adding new functions to Bitlash is easy with [[userfunctions|User Functions]]\\
+
+  * [[Porting]] Bitlash to various hardware \\
+
+==== Related ====
+  * [[Sightings]] of Bitlash in the wild
+  * [[bitty.py]]: a serial port network proxy in Python
+  * [[tips:mac]] \\
+
+==== Contact ====
+  * [[About]] Bitlash
+  * Contact the [[Author]]

@@ -1,0 +1,94 @@
+===== Porting Bitlash =====
+
+Here is documentation on how to get Bitlash up and running on various hardware combinations.
+
+----
+==== Telnet to your Arduino: AdaFruit Xport Direct Ethernet Shield ====
+
+Bitlash 0.9 includes working support for the AdaFruit Ethernet Shield with Lantronix XPort Direct.  The configuration is set up to allow you to telnet in to your Arduino and control it with Bitlash.
+The quick summary: 
+
+  * Build and wire the shield per AdaFruit instructions.
+  * Configure the XPort Direct per below.
+  * Paste bitlash.cpp into an empty Arduino 0012 sketch window.
+  * Find the AF_ETHERNET define.  
+  * Remove the comment bars before the define to enable it, and upload the code.
+  * Telnet to your Arduino on port 10001.
+
+== Configure the XPort Direct ==
+Make sure your Xport Direct is set up like this:
+<code>
+*** Channel 1
+Baudrate 9600, I/F Mode 4C, Flow 00
+Port 10001
+Connect Mode : D4
+Send '+++' in Modem Mode enabled
+Show IP addr after 'RING' enabled
+Auto increment source port disabled
+Remote IP Adr: --- none ---, Port 00000
+Disconn Mode : 00
+Flush   Mode : 00
+</code>
+This configuration sets up for incoming telnet on port 10001.  If you would prefer a different port, configure it in the "port" parameter of Channel 1.
+
+== Connect via telnet, but do use MODE CHAR! ==
+Use your favorite Telnet program to connect, and off you go.
+
+One little thing.  You MUST use "mode character" in the telnet program.  If you don't, you'll see garbage as the XPort swamps the Arduino with a whole line of data at a time.
+
+<code>
+bitlash:~ bitl$ telnet 192.168.0.16 10001
+Trying 192.168.0.16...
+Connected to 192.168.0.16.
+Escape character is '^]'.
+^]			// type this to talk to telnet
+telnet> mode char	// type this to set character mode
+> boot		// just to show the banner
+bitlash v0.9d here! (c) 2008 Bill Roy -type HELP- 1383 bytes free
+> 
+</code>
+
+Now you are connected to Bitlash on your Arduino over the internet.  Anything you used to do locally with Bitlash, you can now do from anywhere.
+
+  * Consider setting a password on the XPort.  It's in the settings interface.
+  * You can print to the hardware serial port and therefore debug via USB using print #1:"foo"
+  * If all you want is to use the XPort for output, you can use the normal Bitlash without the AF_ETHERNET define and use print #2:"foo" to print to the XPort thence onward to the net.
+
+
+== Other Ethernet Interfaces ==
+
+The same serial io interface used for the AdaFruit/Lantronix XPort Direct should work with suitable adjustments on other network adapters as well.  The reader is encouraged to experiment and report back with interesting findings.
+
+----
+==== Bitlash on the ATMega328P ====
+
+We've got Bitlash 0.9 working with the [[http://www.adafruit.com/index.php?main_page=product_info&cPath=17&products_id=123|AdaFruit preprogrammed Atmega328 chip]] for twice the PROGMEM flash and twice the EEPROM space.  Bitlash 0.9 automatically detects the '328 and does the right thing at compile time to use the extra space.
+[[http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1226117225/2]]
+
+These instructions from extremis on the Arduino board were very helpful in setting up the Arduino environment for the '328, but be prepared for a little experimentation since it's all still pre-production.
+
+It does not appear that this '328 bootloader sets pinMode(13,OUTPUT) like the Arduino stock bootloader does.  So set pinmode(13,1) yourself if you want to use the debug LED.
+
+----
+
+==== Bitlash on the Sanguino ATMega644 ====
+
+The [[http://sanguino.cc|Sanguino]] is an awesome big brother to Arduino.  It's based on the ATMega644 with 4x the EEPROM and flash.  Preliminary Bitlash support is up and running in 0.9 with the Sanguino 1.3 software - including proper setup and use of the two hardware UART channels and the bigger EEPROM data store.  Be aware there are serial port issues that require a patch so please ping for details if you have a Sanguino.
+Here are some notes from the port:
+
+  * EEPROM size is 2048
+  * Free ram is big (> 3k)
+  * 64k program space
+  * primary serial tx out is pin 9
+  * secondary serial tx out is pin 11
+  * these have interrupt driven buffered io
+  * digital pins [0..23] - debug LED on D0 not D13
+  * analog pins [0..7] - use caution for inverted mapping to d24..d32 compared with Arduino/168
+
+----
+==== Other tested configurations ====
+
+  * Arduino Diecimila, Duemilanove, and UNO
+  * Sparkfun Wee
+  * Sparkfun Pro Mini
+  * Stickduino

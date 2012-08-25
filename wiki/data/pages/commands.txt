@@ -1,0 +1,139 @@
+===== Bitlash Command Reference =====
+
+Here is an alphabetical reference list of Bitlash commands.  (See also [[bitlashfunctions|Bitlash functions]].)
+
+----
+==== expression evaluation ====
+
+If you type a "naked expression" it will be evaluated, and any side effects like function calls and function executions will happen, but nothing is printed unless you say so using [[Printing|print]].  For example:
+<code>
+> d13=1; delay(125); d13=0
+>
+</code>
+Your code is executed (d13 goes high for 125 ms), but all you see on the console is the command prompt after it's done.
+
+
+----
+==== boot: restart the arduino ====
+
+Resets the Arduino.  On restart, the **startup** function will run, if one is present.
+
+----
+==== function funcname { stmt; ...; stmt;} ====
+
+Defines a new Bitlash Function to be stored in EEPROM.
+
+Note: Earlier versions of Bitlash defined macros using a different syntax.
+
+Bitlash [[functions|functions]] have their own section.
+
+<code>
+> function blip {d13=!d13;}
+> ls
+function blip {d13=!d13;}
+> rm blip
+> ls
+>
+</code>
+
+----
+==== help: display some onboard help text ====
+
+Help displays a short help message that can be helpful if you forget the name of a command or function.  It also displays a list of your functions via 'ls'.
+
+----
+==== if (expr) {stmt;...; stmt;} [else {stmt;stmt;...; stmt;}] ====
+
+The **while** and **if** commands have their [[conditionals|own section]].
+
+----
+==== ls ====
+
+List all the functions stored in EEPROM.
+
+<code>
+> function blip {d13=!d13;}
+> ls
+function blip {d13=!d13};
+</code>
+
+----
+==== peep: print a map of eeprom ====
+
+Peep prints a map of eeprom usage.  This can help you see how full your EEPROM is, and whether you have fragmented free space.
+
+<code>
+> peep
+E000:  foo\ prin  t #4 :".^  ",\b lip\  d13= !d13  \cc\ ^^^\  t13\ d13=  !d13 ;sno  oze  100\
+E040:  b0\b lip;  snoo ze(i  *i); if +  +i>m :i=-  m\st artu  p\ru n t1  3\al fa\a  bcde fghi
+E080:  jklm nopq  rstu vwxy  z\cl s\pr  int  #4:"  xfe^ ",\.  .... ....  .... ....  .... ....
+E0C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E100:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E140:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E180:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+E1C0:  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....  .... ....
+</code>
+
+Note that the "E000" address is actually EEPROM address 0000.  Subtract 0xe000 from the addresses shown.
+
+----
+==== print [#pin:] [[expr][,]] -- print ====
+
+In its simplest form: print foo,bar will get you started.  But print has a lot of options, so please see the section on [[Printing]] for details.
+
+----
+==== ps: 'process status' -- print a list of running background functions ====
+
+Ps shows a list of running background functions.
+
+<code>
+> run t13
+> ps
+0: t13
+</code>
+
+----
+==== rm: delete a function from eeprom ====
+<code>
+> function blip {d13=!d13;}
+> ls
+function blip {d13=!d13;}
+> rm blip
+> ls
+>
+</code>
+
+Use "rm *" to erase the whole EEPROM.
+
+----
+==== run: run a function in the background ====
+
+See the section on [[functions:background|Background functions]] for details.
+<code>
+> run t13,125
+> ps
+0: t13
+</code>
+
+----
+==== stop tasknum | stop | stop * ====
+
+Stop a background task by number, stop the current task, or stop all tasks.
+
+<code>
+> run t13
+> ps
+0: t13
+> stop 0
+> ps
+>
+</code>
+
+----
+==== switch (expr) {stmt0; stmt1; ...; stmtN;} ====
+
+The switch statement is described in [[Conditionals]].
+----
+==== while (expr) {stmt;...; stmt;} ====
+
+The while and if statements have their own [[conditionals|section]].

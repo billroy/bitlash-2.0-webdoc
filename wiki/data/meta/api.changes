@@ -1,0 +1,17 @@
+1263255385	::1	C	api	wikiops	created	
+1263256649	::1	E	api	wikiops		
+1263319152	::1	E	api	wikiops		
+1263319331	::1	E	api	wikiops		
+1263319424	::1	E	api	wikiops		
+1263319509	::1	E	api	wikiops		
+1263319541	::1	E	api	wikiops		
+1263319594	::1	E	api	wikiops		
+1263319626	::1	E	api	wikiops		
+1263319668	::1	E	api	wikiops		
+1263319687	::1	E	api	wikiops		
+1297000556	::1	E	api	wikiops		
+1297001405	::1	E	api	wikiops		
+1297001461	::1	E	api	wikiops		
+1312649020	70.140.190.80	E	api	karl	[Manipulating Bitlash Variables from C] Changed references to getValue to getVar.	
+1312649069	70.140.190.80	E	api	karl	[long x = getValue(char var);] It's getVar.  getValue does something else, good but different.	
+1314240609	70.140.190.80	E	api	karl	[Console redirection with setOutputHandler()] 	

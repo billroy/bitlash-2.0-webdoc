@@ -1,0 +1,21 @@
+This skin is based on on an implementation of the bf-skin for pmwiki which in turn, if i recall correctly, is based on the bf-skin for wordpress . Both I cannot find a trace of anymore but credits go to their creators. Since two skins have gone before, this one was called bf3. This is version 2 which has some more polish ans the option to switch color scheme from within the theme option. Since it is now more than just a convert of the named themes I thought it would be appropriate to give it a name for it self:
+
+   * Beaufort
+
+There are 3 color themes included: 
+  * Sunshine is orange and blue and has a "warm" feeling to it. 
+  * Republic has a formal dark blue and dark red appearance. 
+  * Dearjohn is more cheerful with green and yellow.
+
+Key points of the skin are:
+
+  * Simple, yet artistically pleasing.
+  * I've tried to make it easily readable by minimizing the amount of clutter.
+  * Easy accessible search.
+  * All most-used-functions quick to reach.
+
+The skin is crafted from the default DokuWiki skin. I have tried to keep most of the original tags in place so it should be mostly compatible with DokuWiki implementations. Does not work with IE6 or lower. 
+
+(c) 2009 by Rolf Deenen <rolf.deenen@gmail.com>
+See COPYING for license info.
+

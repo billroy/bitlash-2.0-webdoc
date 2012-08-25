@@ -1,0 +1,9 @@
+===== The Author =====
+
+Bitlash was written by Bill Roy and released as 1.0 in January, 2010.  
+
+Bill keeps a weblog about Bitlash and other things that occasionally escape from his laboratory at [[http://entropymouse.com/blog|The Entropymouse Capers]].
+
+==== Contact ====
+
+Please contact the author by email at <bill@bitlash.net>.

@@ -1,0 +1,331 @@
+
+<h2 class="sectionedit1"><a name="bitlash_online" id="bitlash_online">Bitlash Online</a></h2>
+<div class="level2">
+
+</div>
+<!-- EDIT1 SECTION "Bitlash Online" [1-28] -->
+<h3 class="sectionedit2"><a name="quick_start" id="quick_start">Quick Start</a></h3>
+<div class="level3">
+<ul>
+<li class="level1"><div class="li"> <a href="/wiki/_media/bitlash-2.0-rc3d.zip" class="media mediafile mf_zip" title="bitlash-2.0-rc3d.zip">Download Bitlash 2.0 RC3 with SD Card Support</a></div>
+</li>
+<li class="level1"><div class="li"> <a href="/wiki/install" class="wikilink1" title="install">Install</a> Bitlash and upload it to your Arduino</div>
+</li>
+<li class="level1"><div class="li"> Proceed to the <a href="/wiki/docindex" class="wikilink1" title="docindex">Documentation Index</a></div>
+</li>
+<li class="level1"><div class="li"> Jump to the <a href="/wiki/functions" class="wikilink1" title="functions">Built-in Functions Reference</a> page<br/>
+</div>
+</li>
+<li class="level1"><div class="li"> Read more <a href="/wiki/about" class="wikilink1" title="about">About Bitlash</a> and the <a href="/wiki/author" class="wikilink1" title="author">Author</a></div>
+</li>
+</ul>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "Quick Start" [29-361] -->
+<h3 class="sectionedit3"><a name="what_is_bitlash" id="what_is_bitlash">What is Bitlash?</a></h3>
+<div class="level3">
+
+<p>
+Bitlash is an open source interpreted language shell and embedded programming environment.  This website documents Bitlash for the popular and useful <a href="http://arduino.cc" class="urlextern" title="http://arduino.cc"  rel="nofollow">Arduino</a>.
+</p>
+
+<p>
+The Bitlash shell runs entirely on the Arduino and supports many of the familiar Arduino functions.  Bitlash interprets commands you type on the serial port:
+</p>
+<pre class="code">bitlash here! v2.0 RC2 (c) 2011 Bill Roy -type HELP- 978 bytes free
+&gt; print &quot;Hello, world!&quot;, millis
+Hello, world! 10161
+&gt; </pre>
+
+<p>
+It&#039;s easy to extend Bitlash by naming a sequence of commands as a <a href="/wiki/functions" class="wikilink1" title="functions">Bitlash function</a>, which is like a new word in the Bitlash language.  A Bitlash application is a set of such functions, and since they are stored in the EEPROM, Bitlash can start up your application automatically at boot time for standalone operation.
+</p>
+
+<p>
+In cases where you need native C code to get closer to the hardware, perhaps for speed or to interface with a custom peripheral,
+it&#039;s also easy to integrate your C code with Bitlash as a <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">User Function</a>.
+</p>
+
+<p>
+As scripting languages are to Internet applications, Bitlash is to embedded ones.  Test your embedded C code by interacting with it through Bitlash userfunctions over your Arduino&#039;s USB or serial interface.  Configure and manage your application from Bitlash rather than some hokey syntax that you cooked up for that one purpose, that&#039;s already getting in the way and won&#039;t make any sense to you when you need to extend it six months from now.
+</p>
+
+<p>
+At the low end, Bitlash runs fine on an Arduino Uno, leaving most of the space for your app.  On an Arduino Mega 2560, large Bitlash apps are possible.  <a href="/wiki/examples" class="wikilink1" title="examples">Examples</a> include a Bitlash-powered webserver and interacting with Bitlash via telnet.
+</p>
+
+<p>
+Read on for more about Bitlash.
+</p>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "What is Bitlash?" [362-2148] -->
+<h3 class="sectionedit4"><a name="how_does_it_work" id="how_does_it_work">How does it work?</a></h3>
+<div class="level3">
+
+<p>
+The Bitlash embedded interpreter that runs in about 14k of memory on an Atmel AVR processor.  It works nicely with Arduino to make a development and prototyping tool for those situations where you need to bang some bits on the Arduino but writing a sketch in C is premature.  It&#039;s very convenient for bringing up and debugging new hardware.
+</p>
+
+<p>
+The Bitlash command language is very similar to Arduino C and includes a large repertiore of the familiar Arduino C functions so you can hack your hardware from the serial command line or even over the internet via telnet.
+</p>
+
+<p>
+You can store commands as <a href="/wiki/functions" class="wikilink1" title="functions">functions</a> in EEPROM, compile them into flash memory, or put them on an SD card. A user-defined bitlash startup function is run automatically at bootup, making the automation and maintenance of small applications very easy.  Here is the classic Blink13 program as a complete Bitlash application in two functions, <strong>toggle13</strong> to toggle the led and <strong>startup</strong> to initialize and run it:
+</p>
+<pre class="code">&gt; function toggle13 {d13=!d13;}
+&gt; function startup {pinmode(13,1); run toggle13,1000;}
+&gt; boot
+(d13 toggles every 1000ms)</pre>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "How does it work?" [2149-3309] -->
+<h3 class="sectionedit5"><a name="announcements" id="announcements">Announcements</a></h3>
+<div class="level3">
+
+<p>
+Bitlash 2.0 - Run script from SD Card - RC3d available for download
+</p>
+
+<p>
+<em>June 5, 2011</em>
+</p>
+<ul>
+<li class="level1"><div class="li"> <a href="/wiki/_media/bitlash-2.0-rc3d.zip" class="media mediafile mf_zip" title="bitlash-2.0-rc3d.zip">Download Bitlash 2.0 RC3 with SD Card Support</a></div>
+</li>
+</ul>
+
+<p>
+I&#039;m making an early version of Bitlash with SD Card support available for testing and use by people who can tolerate the early state of the code and the documentation.  I&#039;m hoping to get feedback on how it works, and on some of the open issues.
+</p>
+
+<p>
+Here&#039;s the big news: This version runs Bitlash functions from an SD Card file system.  EEPROM space is no longer a limiting factor for Bitlash applications.
+</p>
+
+<p>
+You can invoke a file function by mentioning the filename from the command line or from any other function (in EEPROM or a user function) as usual. 
+</p>
+
+<p>
+You can pass arguments to the function using the arg(n) mechanism from the earlier beta.  And those arguments can now be string arguments, too:
+</p>
+<pre class="code">printf(&quot;The time is %u\n&quot;, millis)</pre>
+
+<p>
+(And there&#039;s printf()…)
+</p>
+
+<p>
+Functions in files can use functions in other files, which in turn can use functions defined interchangeably with scripts from EEPROM.
+</p>
+
+<p>
+These file system functions are included in the bitlashsd demo; they provide bare bones support for building file-based applications in Bitlash, or just messing around from the command line:
+</p>
+<pre class="code">dir
+exists(&quot;filename&quot;) 
+del(&quot;filename&quot;) 
+create(&quot;filename&quot;, &quot;first line\nsecondline\n&quot;)
+append(&quot;filename&quot;, &quot;another line\n&quot;)
+type(&quot;filename&quot;) 
+cd(&quot;dirname&quot;)
+md(&quot;dirname&quot;)</pre>
+
+<p>
+You can write to the SD card, too, using fprintf():
+</p>
+<pre class="code">fprintf(&quot;mylog.dat&quot;, &quot;The time is %u\n&quot;, millis)</pre>
+
+<p>
+I&#039;m looking for feedback on bugs and problems, irritations and the language design, and hardware combinations that work or don&#039;t.
+</p>
+
+<p>
+Please note: SD Card support requires the SdFatBeta library by William Greiman.  You need to install this library, as well as Bitlash.  Instructions in the README.
+</p>
+
+</div>
+
+<h4><a name="bitlash_20_release_candidate_2_rc2_available_for_download" id="bitlash_20_release_candidate_2_rc2_available_for_download">Bitlash 2.0 Release Candidate 2 (RC2) Available for Download</a></h4>
+<div class="level4">
+
+<p>
+<em>March 6, 2011</em>
+</p>
+
+<p>
+Bitlash 2.0 RC2 is <a href="/wiki/_media/bitlash-2.0-rc2.zip" class="media mediafile mf_zip" title="bitlash-2.0-rc2.zip">available for download</a>.
+</p>
+
+<p>
+This release fixes a bug which caused functions to be saved to EEPROM with extra, spurious characters at the end.  See the RELEASE notes file for details.
+</p>
+
+<p>
+All users are encouraged to update to this version.  Please report any new bugs and issues.
+</p>
+
+</div>
+
+<h4><a name="bitlash_20_release_candidate_1_rc1_available_for_download" id="bitlash_20_release_candidate_1_rc1_available_for_download">Bitlash 2.0 Release Candidate 1 (RC1) Available for Download</a></h4>
+<div class="level4">
+
+<p>
+<em>February 5, 2011</em>
+</p>
+
+<p>
+Bitlash 2.0 RC1 is <a href="/wiki/_media/bitlash-2.0-rc1.zip" class="media mediafile mf_zip" title="bitlash-2.0-rc1.zip">available for download</a>.
+</p>
+
+<p>
+Here is a summary of changes; detailed documentation is available at <a href="http://bitlash.net/" class="urlextern" title="http://bitlash.net/"  rel="nofollow">Bitlash Online</a>.
+</p>
+<ul>
+<li class="level1"><div class="li"> <strong>Syntax overhaul</strong></div>
+<ul>
+<li class="level2"><div class="li"> Bitlash 2.0 language is considerably different</div>
+</li>
+<li class="level2"><div class="li"> Macros from Bitlash 1.1 will need to be updated to run in 2.0</div>
+</li>
+<li class="level2"><div class="li"> Key changes:</div>
+<ul>
+<li class="level3"><div class="li"> if (expression) { stmt;…;stmt;} else {stmt;…;stmt;}</div>
+</li>
+<li class="level3"><div class="li"> while (expression) { stmt; }</div>
+</li>
+<li class="level3"><div class="li"> switch (expression) { stmt0; stmt1; … stmtN; }</div>
+</li>
+<li class="level3"><div class="li"> function hello {print “Hello, world!”;}</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Macros are now <strong>Functions</strong>, they take arguments and can return a value</div>
+<ul>
+<li class="level2"><div class="li"> arg(0) is the count of args you got</div>
+</li>
+<li class="level2"><div class="li"> arg(1..n) are the args</div>
+</li>
+<li class="level2"><div class="li"> return expression; to return a value; zero is assumed</div>
+</li>
+<li class="level2"><div class="li"> User Functions in C use this same scheme now</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Function (/macro) definition syntax has changed:<pre class="code">function printargs {i=0; while ++i&lt;arg(0) {print arg(i);}}</pre>
+</div>
+</li>
+<li class="level1"><div class="li"> New Built-In Functions</div>
+<ul>
+<li class="level2"><div class="li"> bc: bitclear</div>
+</li>
+<li class="level2"><div class="li"> bs: bitset</div>
+</li>
+<li class="level2"><div class="li"> br: bitread</div>
+</li>
+<li class="level2"><div class="li"> bw: bitwrite</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> New <acronym title="Application Programming Interface">API</acronym> calls</div>
+<ul>
+<li class="level2"><div class="li"> setOutputHandler() api allows capture of serial output</div>
+</li>
+<li class="level2"><div class="li"> doCharacter() api allows char-at-a-time input to Bitlash	</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> New Examples</div>
+<ul>
+<li class="level2"><div class="li"> BitChi web and telnet server	</div>
+</li>
+</ul>
+</li>
+<li class="level1"><div class="li"> Small Beans</div>
+<ul>
+<li class="level2"><div class="li"> Input buffer is 140 characters, up from 80.  twitter is the new Hollerith</div>
+</li>
+<li class="level2"><div class="li"> Binary constants of the form 0b01010101 are supported</div>
+</li>
+</ul>
+</li>
+</ul>
+
+</div>
+
+<h4><a name="bitlash_11_documentation_archive" id="bitlash_11_documentation_archive">Bitlash 1.1 Documentation Archive</a></h4>
+<div class="level4">
+
+<p>
+Bitlash 1.1 was the mainline Bitlash release in 2010.  It will be replaced by Bitlash 2 during 2011.
+</p>
+
+<p>
+The documentation wiki for Bitlash 1.1 is archived for reference at the <a href="http://bitlash11.bitlash.net" class="urlextern" title="http://bitlash11.bitlash.net"  rel="nofollow">Bitlash v1.1 Site Archive</a>
+</p>
+
+</div>
+
+<h4><a name="bitlash_11_release_announcement_2010" id="bitlash_11_release_announcement_2010">Bitlash 1.1 Release Announcement 2010</a></h4>
+<div class="level4">
+
+<p>
+<em>February 4, 2010</em>
+</p>
+
+<p>
+These features were announced in Bitlash 1.1:
+</p>
+<ul>
+<li class="level1"><div class="li"> <strong>User Functions:</strong> This release is mainly about the new <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">userfunctions</a> feature, which makes it Really Easy to add your C function to Bitlash.  You&#039;ll find some new examples of this feature in the Arduino IDE at the File → Examples → bitlash menu item, and documentation at the <a href="/wiki/userfunctions" class="wikilink1" title="userfunctions">userfunctions</a> page.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> <strong>New Functions inb() and outb(): </strong> Read and write the AVR registers from your Bitlash scripts.  Details on the <a href="/wiki/functions" class="wikilink1" title="functions">functions</a> page.</div>
+</li>
+</ul>
+<ul>
+<li class="level1"><div class="li"> <strong>Deprecated Functions:</strong> These functions didn&#039;t make the cut at spring cleaning time and are no longer supported in the Bitlash core: du(), map(), shiftout(), sa(), sr() and usr().</div>
+</li>
+</ul>
+
+</div>
+
+<h4><a name="bitlash_10_release_2009" id="bitlash_10_release_2009">Bitlash 1.0 Release 2009</a></h4>
+<div class="level4">
+
+<p>
+<em>January 17, 2009</em>
+</p>
+
+<p>
+After over a year in development Bitlash 1.0 is available for <a href="/wiki/download" class="wikilink1" title="download">download</a>. 
+</p>
+
+<p>
+There is one bug fix since the RC2 version, renaming the folders and files in the /examples tree to remove the &#039;-&#039; which became deprecated in Arduino 0017.
+</p>
+
+<p>
+Bitlash 1.0 is tested on <a href="http://arduino.cc/en/Main/Software" class="urlextern" title="http://arduino.cc/en/Main/Software"  rel="nofollow">Arduino 0017</a> and <a href="http://code.google.com/p/arduino/downloads/list" class="urlextern" title="http://code.google.com/p/arduino/downloads/list"  rel="nofollow">Arduino 0018 RC1</a>.  The <a href="/wiki/install" class="wikilink1" title="install">install</a> instructions are updated for 0017.  
+</p>
+
+</div>
+
+<h5><a name="documentation_overhaul" id="documentation_overhaul">Documentation Overhaul</a></h5>
+<div class="level5">
+
+<p>
+The Bitlash documentation is now hosted in this wiki.  Please send comments to the <a href="/wiki/author" class="wikilink1" title="author">Author</a>
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "Announcements" [3310-] -->

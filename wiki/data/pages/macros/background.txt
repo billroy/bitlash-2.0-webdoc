@@ -1,0 +1,95 @@
+===== Background Macros =====
+
+Bitlash can run up to 8 macros in the background while you work in the foreground at the command prompt.
+----
+
+==== The Run Command ====
+
+The **run** command runs a macro in the background:
+<code>
+> run toggle13	// LED on D13 starts flashing
+>			// and you get the foreground prompt back
+</code>
+
+Think of the run X command as being a "while 1: X" that runs in the time between 
+your keystrokes. 
+
+In the above example, toggle13 will be called Very Frequently, perhaps as often as once each time your loop() procedure calls runBitlash().
+
+Bitlash stops all background macros when you press ^C.  You can also stop a specific one using ps (to discover its process id) and stop.
+<code>
+> ps			// list running background macros
+0: toggle13		// toggle13 is number 0
+> stop 0		// or stop * or ^C to stop all
+>
+</code>
+
+----
+==== Run Command: Optional [,snoozems] argument and changes to snooze() ====
+
+The "run" command has been extended to provide control over how often each background task is run without using the snooze() command.  This is convenient for tasks that run on a fixed timer: many macros can dispense with the snoozing thing entirely if the runtime interval is known when the macro is started.
+
+For example, this will run the macro t1 every 27 millis or so:
+<code>
+run t1,27
+</code>
+
+If the optional snoozems argument is not specified it is treated as zero: in other words, you must manage the snooze interval in your macro's code; see below.
+
+This change also has a small impact on semantics of the snooze() function.  Previously, snooze() would set the time-at-which-the-task-is-eligible to run immediately when called.
+
+The new behavior is subtly different: the scheduling takes place somewhat later, when the macro exits the current invocation, not at the time of some call to snooze().  Bitlash maintains a snoozems value for each background task; by default it is zero, and the task is called as fast as the round-robin gets back to it.  If you specify a value in the run command or by calling snooze, this value is saved and applied in the rescheduling calculation when the task exits.
+
+----
+==== Run Your Application Automatically in the Background ====
+
+Use the startup macro to do a run on your top-level macro and your application
+can run in the background while you have control of the keyboard to poke at it:
+<code>
+>startup:="run myapp"
+> boot
+bitlash here! v0.6...
+302 bytes free
+>ps
+0:myapp
+</code>
+
+----
+==== Don't delay(); use snooze() instead ====
+If your objective is to present the illusion of multitasking, you should avoid
+using the delay() function in macros, since everything else comes to a screeching halt while 
+delay() is happening.
+
+Foreground keyboard entry may become sluggish if you have many tasks with delay()s more than a few millis each.
+
+Bitlash provides the snooze(ms) function to give your background macro tasks a way to delay without hogging the CPU. Bitlash suspends a task which calls snooze() until the specified number of millis has passed.
+
+NOTE: Calling snooze() has no apparent immediate effect. Your macro continues to 
+execute, if there is further code after the snooze(). But bitlash will not re-enter  your task until the specified time has passed.
+
+Here is an improved toggle13 that uses snooze() instead of delay():
+<code>
+> snooze13:="d13=!d13; snooze(100)"
+> run snooze13
+>
+</code>
+
+Since snooze() means "don't call me again for a while" instead of "please spin away some time", you will find that your foreground typing and responsiveness of other background macros is much improved compared with "run toggle13".
+
+----
+==== Example: Asynchronous Background Tasks ====
+
+Here is an example of three asynchronous background tasks each doing its thing on its own little timeline, using snooze() to set its calling interval:
+<code>
+> chirp:="print \"chirp \",; snooze(2500)"
+> eep:="print \"eep \",; snooze(800);"
+> ribbit:="print \"ribbit \",; snooze(3500);"
+> nightfall:="run eep;run chirp;run ribbit;ps"
+> nightfall
+0:eep
+1:chirp
+2:ribbit
+> eep chirp ribbit eep eep eep chirp eep
+ribbit eep eep chirp eep eep ribbit eep 
+chirp eep ^C
+</code>

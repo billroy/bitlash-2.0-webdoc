@@ -1,0 +1,3 @@
+Here is an architectural overview of Bitlash and its relationship to the other elements of the Arduino:
+
+{{:architecture_of_bitlash_for_arduino.jpg?600|}}

@@ -1,0 +1,460 @@
+
+<h2 class="sectionedit1"><a name="bitlash_built-in_function_reference" id="bitlash_built-in_function_reference">Bitlash Built-In Function Reference</a></h2>
+<div class="level2">
+
+<p>
+This is an alphabetical reference listing all the built-in functions provided in Bitlash.
+</p>
+
+<p>
+Many Bitlash functions are straight pass-throughs from the Arduino functions of the same name.  Therefore, the definitive reference for the behavior of the functions is <a href="http://arduino.cc/en/Reference/Extended" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/Extended">the Arduino Extended Reference Page</a>.
+</p>
+
+<p>
+Functions may be used in expressions in the normal way: abs(ar(3)-256) and so forth.  
+</p>
+
+<p>
+Bear in mind that functions return 32-bit integer values (<strong>signed long</strong> or <strong>int32_t</strong> in C).  Whether the value is interpreted as signed or unsigned depends on the function.
+</p>
+
+<p>
+It is an error to call a function with the wrong number of arguments.
+</p>
+
+<p>
+For functions of zero arguments you may omit the empty parens ():
+</p>
+<pre class="code">&gt; print free,free(),millis,millis()
+335 335 24455 24456</pre>
+
+<p>
+See also <a href="/wiki/commands" class="wikilink1" title="commands">Bitlash commands</a> and the <a href="/wiki/language" class="wikilink1" title="language">Bitlash language</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT1 SECTION "Bitlash Built-In Function Reference" [1-927] -->
+<h3 class="sectionedit2"><a name="abs_x_absolute_value" id="abs_x_absolute_value">abs(x): absolute value</a></h3>
+<div class="level3">
+
+<p>
+Return x &lt; 0 ? -x : x.  See <a href="http://arduino.cc/en/Reference/abs" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/abs">abs</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT2 SECTION "abs(x): absolute value" [928-1012] -->
+<h3 class="sectionedit3"><a name="ar_apin_analogread_apin" id="ar_apin_analogread_apin">ar(apin): analogRead(apin)</a></h3>
+<div class="level3">
+
+<p>
+Return a 10-bit analog-to-digital conversion value from the specified <strong>analog input pin</strong>.  See <a href="http://arduino.cc/en/Reference/analogRead" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/analogRead">analogRead</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT3 SECTION "ar(apin): analogRead(apin)" [1013-1177] -->
+<h3 class="sectionedit4"><a name="aw_dpin_value_analogwrite_dpin_value" id="aw_dpin_value_analogwrite_dpin_value">aw(dpin,value): analogWrite(dpin,value)</a></h3>
+<div class="level3">
+
+<p>
+Write a PWM value to a <strong> digital pwm output pin</strong>.  The pin must be prepared for output beforehand via pinmode(pin,1). 
+</p>
+
+<p>
+A simpler syntax if the pin is fixed is: a6=128
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/analogWrite" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/analogWrite">analogWrite</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT4 SECTION "aw(dpin,value): analogWrite(dpin,value)" [1178-1434] -->
+<h3 class="sectionedit5"><a name="baud_pin_baud_set_baud_rate_for_printed_output" id="baud_pin_baud_set_baud_rate_for_printed_output">baud(pin,baud): set baud rate for printed output</a></h3>
+<div class="level3">
+
+<p>
+By default, Arduino prints at 57600 on pin 0 and 9600 on any other pin.  If you wish to set a different rate use the baud function:
+</p>
+<pre class="code">&gt; baud(5, 4800);	// prepare &quot;print #5:&quot; to produce serial output on pin 5 at 4800 baud (8,n,1) 
+&gt; baud(0, 9600);	// set the default/hardware serial port to 9600 baud</pre>
+
+<p>
+See <a href="/wiki/printing" class="wikilink1" title="printing">printing</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT5 SECTION "baud(pin,baud): set baud rate for printed output" [1435-1832] -->
+<h3 class="sectionedit6"><a name="bc_val_bitnum_bitclear" id="bc_val_bitnum_bitclear">bc(val, bitnum): bitclear</a></h3>
+<div class="level3">
+
+<p>
+Returns val with the bit indicated by bitnum [0..31] set to 0.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/bitclear" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/bitclear">bitclear</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT6 SECTION "bc(val, bitnum): bitclear" [1833-1965] -->
+<h3 class="sectionedit7"><a name="beep_pin_frequencyhz_durationms" id="beep_pin_frequencyhz_durationms">beep(pin, frequencyhz, durationms)</a></h3>
+<div class="level3">
+
+<p>
+Toggle the specified pin at the specified frequency for the specified duration.  Automatically sets pinMode to OUTPUT.  
+</p>
+
+<p>
+Beep is blocking: background execution is paused.  Use caution for long durations: there is no way to break out of a long beep (the longest value is several days).
+</p>
+<pre class="code">&gt; beep(11,440,200)	// make the beeper on pin 11 beep at 440Hz for 200ms</pre>
+<hr />
+
+</div>
+<!-- EDIT7 SECTION "beep(pin, frequencyhz, durationms)" [1966-2390] -->
+<h3 class="sectionedit8"><a name="br_val_bitnum_bitread" id="br_val_bitnum_bitread">br(val, bitnum): bitread</a></h3>
+<div class="level3">
+
+<p>
+Returns the value of the bitnum&#039;th bit [0..31] in val.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/bitread" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/bitread">bitread</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT8 SECTION "br(val, bitnum): bitread" [2391-2513] -->
+<h3 class="sectionedit9"><a name="bs_val_bitnum_bitset" id="bs_val_bitnum_bitset">bs(val, bitnum): bitset</a></h3>
+<div class="level3">
+
+<p>
+Returns val with the bitnum&#039;th bit [0..31] set.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/bitset" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/bitset">bitset</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT9 SECTION "bs(val, bitnum): bitset" [2514-2627] -->
+<h3 class="sectionedit10"><a name="bw_val_bitnum_bitval_bitwrite" id="bw_val_bitnum_bitval_bitwrite">bw(val, bitnum, bitval): bitwrite</a></h3>
+<div class="level3">
+
+<p>
+Returns val with the bitnum&#039;th bit [0..31] set to bitval [0|!0].
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/bitwrite" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/bitwrite">bitwrite</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT10 SECTION "bw(val, bitnum, bitval): bitwrite" [2628-2770] -->
+<h3 class="sectionedit11"><a name="constrain_val_min_max" id="constrain_val_min_max">constrain(val,min,max)</a></h3>
+<div class="level3">
+
+<p>
+Returns the closest value to val between min and max.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/constrain" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/constrain">constrain</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT11 SECTION "constrain(val,min,max)" [2771-2892] -->
+<h3 class="sectionedit12"><a name="delay_milliseconds" id="delay_milliseconds">delay(milliseconds)</a></h3>
+<div class="level3">
+
+<p>
+Pause execution for the specified number of milliseconds.
+</p>
+
+<p>
+Delay is blocking; nothing else happens while a delay() is being processed.  For this reason is it better to use background functions to do things that span non-trivial time.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/delay" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/delay">delay</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT12 SECTION "delay(milliseconds)" [2893-3187] -->
+<h3 class="sectionedit13"><a name="dr_dpin_digitalread_dpin" id="dr_dpin_digitalread_dpin">dr(dpin): digitalRead(dpin)</a></h3>
+<div class="level3">
+
+<p>
+The dr() function is shorthand for digitalRead().  It returns the current logic level on the specified pin.
+</p>
+
+<p>
+If the pin is fixed and known beforehand you can use <strong>pin variable</strong> notation instead:
+</p>
+<pre class="code">&gt; z = 13
+&gt; x = dr(z)   // return digitalRead(13)
+
+&gt; x = d13     // same result using pin variable notation</pre>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/digitalRead" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/digitalRead">digitalRead</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT13 SECTION "dr(dpin): digitalRead(dpin)" [3188-3581] -->
+<h3 class="sectionedit14"><a name="dw_dpin_bval" id="dw_dpin_bval">dw(dpin,bval)</a></h3>
+<div class="level3">
+
+<p>
+digitalWrite: Set the designated pin to the given boolean value.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/digitalWrite" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/digitalWrite">digitalWrite</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT14 SECTION "dw(dpin,bval)" [3582-3708] -->
+<h3 class="sectionedit15"><a name="er_addr_eepromread_addr" id="er_addr_eepromread_addr">er(addr): EEPROM.read(addr)</a></h3>
+<div class="level3">
+
+<p>
+Return the value stored in EEPROM at the specified address.
+</p>
+<hr />
+
+</div>
+<!-- EDIT15 SECTION "er(addr): EEPROM.read(addr)" [3709-3814] -->
+<h3 class="sectionedit16"><a name="ew_addr_value_eepromwrite_addr_value" id="ew_addr_value_eepromwrite_addr_value">ew(addr, value): EEPROM.write(addr, value)</a></h3>
+<div class="level3">
+
+<p>
+Write one-byte value to EEPROM at addr.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/EEPROM" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/EEPROM">EEPROM</a>.
+</p>
+
+<p>
+More on Bitlash and EEPROM at <a href="/wiki/bitlashfunctions" class="wikilink1" title="bitlashfunctions">bitlashfunctions</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT16 SECTION "ew(addr, value): EEPROM.write(addr, value)" [3815-3993] -->
+<h3 class="sectionedit17"><a name="free" id="free">free()</a></h3>
+<div class="level3">
+
+<p>
+Returns the amount of memory between the top of the heap and the stack pointer; in other words, the amount of stack space Bitlash and all your other code, including interrupt handlers, have to work with.
+</p>
+
+<p>
+Numbers less than 50 or so indicate ram starvation and mean that the odd behavior you are seeing (or will see soon) is attributable to the occasional excursion of the stack into the defined ram area, piddling on the interpreter state.  Nothing good will come of this.
+</p>
+
+<p>
+Note that malloc() and free() are not used by or included in Bitlash and the free memory calculation takes no heed of memory broken out of the heap if you should include them for your code.  
+</p>
+
+<p>
+The free() function will issue an exception if free memory appears to be less than zero.
+</p>
+<hr />
+
+</div>
+<!-- EDIT17 SECTION "free()" [3994-4773] -->
+<h3 class="sectionedit18"><a name="inb_reg" id="inb_reg">inb(reg)</a></h3>
+<div class="level3">
+
+<p>
+Return the 8-bit value of the specified AVR processor register.
+</p>
+
+<p>
+The processor registers and their functions are the function of the extensive <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf" class="urlextern" title="http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf"  rel="nofollow">ATmega328P Data Sheet</a>.  You will find a convenient cross reference chart of the registers starting on page 425.
+</p>
+
+<p>
+You specify a register address (from the first column of the table on pp. 425 ff.) to tell the inb() and outb() which register to address.  In the case where the table has two addresses, use the right-hand one. 
+</p>
+
+<p>
+For example, to read the Timer0 count register TCNT0, find its entry on page 470 and note its address is 0x46. Then, to read and print it in Bitlash:
+</p>
+<pre class="code">print inb(0x46)</pre>
+<hr />
+
+</div>
+<!-- EDIT18 SECTION "inb(reg)" [4774-5518] -->
+<h3 class="sectionedit19"><a name="map_val_fromlow_fromhigh_tolow_tohigh" id="map_val_fromlow_fromhigh_tolow_tohigh">map(val, fromlow, fromhigh, tolow, tohigh)</a></h3>
+<div class="level3">
+
+<p>
+Constrains val to [fromlow..fromhigh] and then maps it linearly to [tolow..tohigh].  Got it?
+</p>
+
+<p>
+NOTE: The map() function is deprecated as of Bitlash version 1.1 and is therefore not included in the build.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/map" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/map">map</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT19 SECTION "map(val, fromlow, fromhigh, tolow, tohigh)" [5519-5804] -->
+<h3 class="sectionedit20"><a name="max_a_b" id="max_a_b">max(a,b)</a></h3>
+<div class="level3">
+
+<p>
+Returns the greater of a and b.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/max" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/max">max</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT20 SECTION "max(a,b)" [5805-5884] -->
+<h3 class="sectionedit21"><a name="millis" id="millis">millis()</a></h3>
+<div class="level3">
+
+<p>
+Returns the number of milliseconds since startup.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/millis" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/millis">millis</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT21 SECTION "millis()" [5885-5984] -->
+<h3 class="sectionedit22"><a name="min_a_b" id="min_a_b">min(a,b)</a></h3>
+<div class="level3">
+
+<p>
+Returns the lesser of a and b.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/min" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/min">min</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT22 SECTION "min(a,b)" [5985-6062] -->
+<h3 class="sectionedit23"><a name="outb_reg_value" id="outb_reg_value">outb(reg,value)</a></h3>
+<div class="level3">
+
+<p>
+Set the specified AVR processor register to the given value.
+</p>
+
+<p>
+The processor registers and their functions are the function of the extensive <a href="http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf" class="urlextern" title="http://www.atmel.com/dyn/resources/prod_documents/doc8161.pdf"  rel="nofollow">ATmega328P Data Sheet</a>.  You will find a convenient cross reference chart of the registers starting on page 425.
+</p>
+
+<p>
+You specify a register address (from the first column of the table on pp. 425 ff.) to tell the inb() and outb() which register to address.  In the case where the table has two addresses, use the right-hand one. 
+</p>
+
+<p>
+For example, to set the OCR0A register (0x47) to control timer 0 PWM, you could say:
+</p>
+<pre class="code">outb(0x47, 128)</pre>
+<hr />
+
+</div>
+<!-- EDIT23 SECTION "outb(reg,value)" [6063-6745] -->
+<h3 class="sectionedit24"><a name="pinmode_pin_outie" id="pinmode_pin_outie">pinmode(pin,outie)</a></h3>
+<div class="level3">
+
+<p>
+Set the pin to an output pin if <strong>outie</strong> is true.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/pinMode" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/pinMode">pinMode</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT24 SECTION "pinmode(pin,outie)" [6746-6858] -->
+<h3 class="sectionedit25"><a name="pulsein_pin_value_timeout" id="pulsein_pin_value_timeout">pulsein(pin, value, timeout)</a></h3>
+<div class="level3">
+
+<p>
+Times an input pulse.  See <a href="http://arduino.cc/en/Reference/pulseIn" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/pulseIn">pulseIn</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT25 SECTION "pulsein(pin, value, timeout)" [6859-6954] -->
+<h3 class="sectionedit26"><a name="random_max" id="random_max">random(max)</a></h3>
+<div class="level3">
+
+<p>
+Returns a random number between 0 and max-1.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/random" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/random">random</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT26 SECTION "random(max)" [6955-7054] -->
+<h3 class="sectionedit27"><a name="shiftout_datapin_clkpin_bitorder_value" id="shiftout_datapin_clkpin_bitorder_value">shiftout(dataPin, clkPin, bitOrder, value)</a></h3>
+<div class="level3">
+
+<p>
+Bitbang the provided value out the data pin, clocking with the clock pin.
+</p>
+
+<p>
+See <a href="http://arduino.cc/en/Reference/shiftOut" class="interwiki iw_arduino" title="http://arduino.cc/en/Reference/shiftOut">shiftOut</a>.
+</p>
+<hr />
+
+</div>
+<!-- EDIT27 SECTION "shiftout(dataPin, clkPin, bitOrder, value)" [7055-7215] -->
+<h3 class="sectionedit28"><a name="sign_value" id="sign_value">sign(value)</a></h3>
+<div class="level3">
+
+<p>
+Return -1 if value is negative, 0 if 0, or 1 if positive.
+</p>
+<hr />
+
+</div>
+<!-- EDIT28 SECTION "sign(value)" [7216-7303] -->
+<h3 class="sectionedit29"><a name="snooze_snoozems_defer_background_task_execution_for_a_while" id="snooze_snoozems_defer_background_task_execution_for_a_while">snooze(snoozems): defer background task execution for a while</a></h3>
+<div class="level3">
+
+<p>
+Suspend further invocations of this background macro for snoozemillis milliseconds.  See the page on <a href="/wiki/backgroundfunctions" class="wikilink1" title="backgroundfunctions">Background Functions</a> for details on multitasking with snooze.
+</p>
+<pre class="code">&gt; function blink13 {d13=!d13; snooze(100);}
+&gt; run blink13	// only toggles every 100 ms</pre>
+<hr />
+
+</div>
+<!-- EDIT29 SECTION "snooze(snoozems): defer background task execution for a while" [7304-] -->
